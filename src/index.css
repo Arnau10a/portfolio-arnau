@@ -2,12 +2,27 @@
 
 @import "tailwindcss";
 
+@theme {
+  --color-background: #050505;
+  --color-surface: #121212;
+  --color-primary: #ffffff;
+  --color-secondary: #a1a1aa;
+  
+  --font-sans: 'Inter', sans-serif;
+  
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
 @layer base {
   body {
     @apply bg-background text-primary font-sans antialiased overflow-x-hidden selection:bg-white/20;
   }
   
-  /* Smooth scrolling for the whole document */
   html {
     scroll-behavior: smooth;
   }
