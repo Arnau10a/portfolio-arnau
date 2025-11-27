@@ -1,21 +1,43 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// --- AUTO-LOAD LOGIC ---
+const images = import.meta.glob('../assets/renders/*.{png,jpg,jpeg,webp}', {
+  eager: true,
+  import: 'default',
+});
+
 interface Project {
   id: number;
   title: string;
   category: string;
-  size: 'small' | 'medium' | 'large';
-  image: string; // Placeholder for now
+  image: string;
+  isPlaceholder?: boolean;
 }
 
-const projects: Project[] = [
-  { id: 1, title: 'Neon Genesis', category: 'WebGL Experience', size: 'large', image: 'bg-zinc-800' },
-  { id: 2, title: 'Void Walker', category: 'Interactive 3D', size: 'medium', image: 'bg-zinc-900' },
-  { id: 3, title: 'Cyber Punk', category: 'Motion Graphics', size: 'small', image: 'bg-neutral-800' },
-  { id: 4, title: 'Ethereal', category: 'Creative Coding', size: 'medium', image: 'bg-stone-900' },
-  { id: 5, title: 'Flux', category: 'Generative Art', size: 'small', image: 'bg-slate-900' },
+// 2. Generate project data from the loaded images
+const loadedProjects: Project[] = Object.entries(images).map(([path, url], index) => {
+  // Clean up filename to use as title
+  const filename = path.split('/').pop()?.split('.')[0] || 'Untitled';
+  const title = filename.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+  return {
+    id: index,
+    title: title,
+    category: '3D Render',
+    image: url as string,
+  };
+});
+
+// Fallback placeholders
+const placeholders: Project[] = [
+  { id: 101, title: 'Add Your Renders', category: 'To src/assets/renders', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop', isPlaceholder: true },
+  { id: 102, title: 'Auto Discovery', category: 'Feature Enabled', image: 'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2670&auto=format&fit=crop', isPlaceholder: true },
+  { id: 103, title: 'Just Drop Files', category: 'No Imports Needed', image: 'https://images.unsplash.com/photo-1614851099511-773084f6911d?q=80&w=2670&auto=format&fit=crop', isPlaceholder: true },
+  { id: 104, title: 'Vertical Test', category: 'Aspect Ratio', image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop', isPlaceholder: true },
 ];
+
+const displayProjects = loadedProjects.length > 0 ? loadedProjects : placeholders;
 
 const ProjectGrid: React.FC = () => {
   return (
@@ -27,32 +49,37 @@ const ProjectGrid: React.FC = () => {
           viewport={{ once: true }}
           className="text-4xl md:text-6xl font-bold mb-16 tracking-tighter"
         >
-          SELECTED WORK
+          {loadedProjects.length > 0 ? 'SELECTED WORK' : 'WAITING FOR RENDERS'}
         </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[300px]">
-          {projects.map((project, index) => (
+        {/* Masonry Layout using CSS Columns */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+          {displayProjects.map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.6, ease: "easeOut" }}
-              className={`relative group overflow-hidden rounded-2xl border border-white/5 ${
-                project.size === 'large' ? 'md:col-span-2 md:row-span-2' :
-                project.size === 'medium' ? 'md:col-span-2 md:row-span-1' :
-                'md:col-span-1 md:row-span-1'
-              } ${project.image}`}
+              className="relative group break-inside-avoid rounded-2xl overflow-hidden border border-white/5 bg-zinc-900"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-40" />
+              {/* Image - Relative so it defines height */}
+              <img 
+                src={project.image} 
+                alt={project.title}
+                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+
+              {/* Overlays */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              <div className="absolute bottom-0 left-0 p-6 w-full transform transition-transform duration-500 group-hover:translate-y-[-10px]">
-                <h3 className="text-2xl font-bold mb-1">{project.title}</h3>
-                <p className="text-sm text-secondary uppercase tracking-wider">{project.category}</p>
+              <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                <h3 className="text-xl font-bold mb-1 text-white">{project.title}</h3>
+                <p className="text-xs text-gray-300 uppercase tracking-wider">{project.category}</p>
               </div>
 
-              {/* Hover Effect Overlay */}
-              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              {/* Subtle border overlay */}
+              <div className="absolute inset-0 border border-white/10 rounded-2xl pointer-events-none" />
             </motion.div>
           ))}
         </div>
