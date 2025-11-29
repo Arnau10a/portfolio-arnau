@@ -19,9 +19,19 @@ import { CursorProvider } from './context/CursorContext';
 
 import Experience from './components/Experience';
 
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import Loader from './components/Loader';
+
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <CursorProvider>
+      <AnimatePresence mode="wait">
+        {isLoading && <Loader onFinished={() => setIsLoading(false)} />}
+      </AnimatePresence>
+      
       <Experience />
       <Router>
         <CustomCursor />
