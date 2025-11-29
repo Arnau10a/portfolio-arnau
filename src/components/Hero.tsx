@@ -14,8 +14,8 @@ const Hero: React.FC = () => {
       <div className="z-10 text-center mix-blend-difference px-4">
         <ScrollReveal width="100%" delay={0.2}>
           <h1 
-            className="font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 leading-none"
-            style={{ fontSize: '15vw', WebkitTextStroke: '1px rgba(255,255,255,0.1)' }}
+            className="font-[100] tracking-tighter mb-4 text-transparent leading-none transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] hover:font-[900] hover:text-white cursor-default"
+            style={{ fontSize: '15vw', WebkitTextStroke: '1px rgba(255,255,255,0.8)' }}
             onMouseEnter={() => setCursorVariant('text')}
             onMouseLeave={() => setCursorVariant('default')}
           >

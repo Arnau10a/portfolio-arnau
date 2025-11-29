@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Environment, ContactShadows, Stars } from '@react-three/drei';
+import React, { useRef, useMemo } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Float, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 
 const AbstractShape = () => {
@@ -46,7 +46,7 @@ const Experience: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <color attach="background" args={['#050505']} />
+        {/* Background color is now handled in ParallaxGroup */}
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
         <pointLight position={[-10, -10, -10]} intensity={1} />
@@ -62,24 +62,53 @@ const Experience: React.FC = () => {
 
 const ParallaxGroup = () => {
   const groupRef = useRef<THREE.Group>(null);
+  const starsRef = useRef<THREE.Points>(null);
+  const { scene } = useThree();
+
+  // Generate star positions
+  const starPositions = useMemo(() => {
+    const count = 5000;
+    const positions = new Float32Array(count * 3);
+    for(let i = 0; i < count; i++) {
+      positions[i*3] = (Math.random() - 0.5) * 200;
+      positions[i*3+1] = (Math.random() - 0.5) * 200;
+      positions[i*3+2] = (Math.random() - 0.5) * 200;
+    }
+    return positions;
+  }, []);
   
   useFrame((state) => {
     if (groupRef.current) {
       const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
       const mouseX = state.mouse.x;
       const mouseY = state.mouse.y;
 
       // Enhanced Parallax based on scroll
-      // Move up faster
       groupRef.current.position.y = scrollY * 0.005; 
-      // Rotate slightly as we scroll
       groupRef.current.rotation.z = scrollY * 0.0002;
-      // Push back slightly for depth
       groupRef.current.position.z = -scrollY * 0.002;
 
       // Subtle rotation based on mouse
       groupRef.current.rotation.y = mouseX * 0.05 + scrollY * 0.0001;
       groupRef.current.rotation.x = mouseY * 0.05;
+
+      // Color Transition Logic
+      // Calculate progress: 0 at top, 1 when scrolled past hero (100vh)
+      const progress = Math.min(Math.max(scrollY / windowHeight, 0), 1);
+      
+      // Background Color Transition (Dark -> White)
+      const bgColor = new THREE.Color('#050505').lerp(new THREE.Color('#ffffff'), progress);
+      scene.background = bgColor;
+
+      // Stars Color Transition (White -> Black)
+      if (starsRef.current && starsRef.current.material instanceof THREE.PointsMaterial) {
+        const starColor = new THREE.Color('#ffffff').lerp(new THREE.Color('#000000'), progress);
+        starsRef.current.material.color = starColor;
+        
+        // Optional: Rotate stars slightly
+        starsRef.current.rotation.y += 0.0002;
+      }
     }
   });
 
@@ -95,7 +124,23 @@ const ParallaxGroup = () => {
         <icosahedronGeometry args={[1, 0]} />
         <meshStandardMaterial color="#444" wireframe />
       </mesh>
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+      
+      {/* Custom Stars */}
+      <points ref={starsRef}>
+        <bufferGeometry>
+        <bufferAttribute 
+            attach="attributes-position" 
+            args={[starPositions, 3]} 
+          />
+        </bufferGeometry>
+        <pointsMaterial 
+          size={0.35} 
+          color="#ffffff" 
+          transparent 
+          opacity={0.8} 
+          sizeAttenuation={true} 
+        />
+      </points>
     </group>
   );
 };
