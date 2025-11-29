@@ -43,7 +43,7 @@ const Layout: React.FC = () => {
       <footer className="w-full py-12 px-6 flex justify-between items-end border-t border-white/20 mt-20 mix-blend-difference text-white">
         <div>
           <h2 className="text-4xl font-bold tracking-tighter mb-2">Let's create together</h2>
-          <p className="text-secondary">hello@arnaugarcia.com</p>
+          <p className="text-secondary">parise.garcia@gmail.com</p>
         </div>
         <div className="text-sm text-secondary">
           © {new Date().getFullYear()} Arnau Garcia

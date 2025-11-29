@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import { useCursor } from '../context/CursorContext';
+import DecryptedText from './DecryptedText';
 
 const Hero: React.FC = () => {
   const { setCursorVariant } = useCursor();
@@ -13,14 +14,18 @@ const Hero: React.FC = () => {
       {/* Overlay Content */}
       <div className="z-10 text-center mix-blend-difference px-4">
         <ScrollReveal width="100%" delay={0.2}>
-          <h1 
-            className="font-[100] tracking-tighter mb-4 text-transparent leading-none transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] hover:font-[900] hover:text-white cursor-default"
-            style={{ fontSize: '15vw', WebkitTextStroke: '1px rgba(255,255,255,0.8)' }}
+          <div 
+            className="relative cursor-default"
             onMouseEnter={() => setCursorVariant('text')}
             onMouseLeave={() => setCursorVariant('default')}
           >
-            ARNAU GARCIA
-          </h1>
+             <DecryptedText 
+              text="ARNAU GARCIA"
+              speed={30}
+              className="text-8xl md:text-[12rem] font-[100] tracking-tighter mb-4 text-white leading-none hover:font-[900] transition-all duration-700"
+              characters="ARNAUGARCIA1234567890"
+            />
+          </div>
         </ScrollReveal>
         <ScrollReveal width="100%" delay={0.4}>
           <p className="text-lg md:text-xl text-secondary uppercase tracking-[0.5em]">
