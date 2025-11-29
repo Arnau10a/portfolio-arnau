@@ -13,16 +13,26 @@ const Home: React.FC = () => {
   );
 };
 
+import CustomCursor from './components/CustomCursor';
+
+import { CursorProvider } from './context/CursorContext';
+
+import Experience from './components/Experience';
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          {/* Add more routes here if needed */}
-        </Route>
-      </Routes>
-    </Router>
+    <CursorProvider>
+      <Experience />
+      <Router>
+        <CustomCursor />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            {/* Add more routes here if needed */}
+          </Route>
+        </Routes>
+      </Router>
+    </CursorProvider>
   );
 }
 

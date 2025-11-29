@@ -1,15 +1,38 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { useCursor } from '../context/CursorContext';
 
 const Layout: React.FC = () => {
+  const { setCursorVariant } = useCursor();
   return (
-    <div className="min-h-screen w-full bg-background text-primary relative overflow-hidden">
+    <div className="min-h-screen w-full text-primary relative overflow-hidden">
       <nav className="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference">
         <div className="text-xl font-bold tracking-tighter">AG</div>
         <div className="flex gap-6 text-sm font-medium">
-          <a href="#work" className="hover:opacity-70 transition-opacity">WORK</a>
-          <a href="#about" className="hover:opacity-70 transition-opacity">ABOUT</a>
-          <a href="#contact" className="hover:opacity-70 transition-opacity">CONTACT</a>
+          <a 
+            href="#work" 
+            className="hover:opacity-70 transition-opacity"
+            onMouseEnter={() => setCursorVariant('button')}
+            onMouseLeave={() => setCursorVariant('default')}
+          >
+            WORK
+          </a>
+          <a 
+            href="#about" 
+            className="hover:opacity-70 transition-opacity"
+            onMouseEnter={() => setCursorVariant('button')}
+            onMouseLeave={() => setCursorVariant('default')}
+          >
+            ABOUT
+          </a>
+          <a 
+            href="#contact" 
+            className="hover:opacity-70 transition-opacity"
+            onMouseEnter={() => setCursorVariant('button')}
+            onMouseLeave={() => setCursorVariant('default')}
+          >
+            CONTACT
+          </a>
         </div>
       </nav>
       

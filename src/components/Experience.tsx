@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Environment, ContactShadows } from '@react-three/drei';
+import { Float, Environment, ContactShadows, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 
 const AbstractShape = () => {
@@ -9,10 +9,17 @@ const AbstractShape = () => {
   useFrame((state) => {
     if (meshRef.current) {
       const t = state.clock.getElapsedTime();
-      meshRef.current.rotation.x = Math.cos(t / 4) / 2;
-      meshRef.current.rotation.y = Math.sin(t / 4) / 2;
+      const mouseX = state.mouse.x;
+      const mouseY = state.mouse.y;
+
+      // Base rotation
+      meshRef.current.rotation.x = Math.cos(t / 4) / 2 + mouseY * 0.2;
+      meshRef.current.rotation.y = Math.sin(t / 4) / 2 + mouseX * 0.2;
       meshRef.current.rotation.z = Math.sin(t / 1.5) / 2;
-      meshRef.current.position.y = Math.sin(t / 1.5) / 10;
+      
+      // Subtle movement following mouse
+      meshRef.current.position.x = mouseX * 0.5;
+      meshRef.current.position.y = Math.sin(t / 1.5) / 10 + mouseY * 0.5;
     }
   });
 
@@ -37,19 +44,45 @@ const AbstractShape = () => {
 
 const Experience: React.FC = () => {
   return (
-    <div className="absolute inset-0 -z-10 w-full h-full">
+    <div className="fixed inset-0 -z-10 w-full h-full pointer-events-none">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
         <color attach="background" args={['#050505']} />
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
         <pointLight position={[-10, -10, -10]} intensity={1} />
         
-        <AbstractShape />
+        <ParallaxGroup />
         
         <Environment preset="city" />
         <ContactShadows position={[0, -2, 0]} opacity={0.5} scale={10} blur={2.5} far={4} />
       </Canvas>
     </div>
+  );
+};
+
+const ParallaxGroup = () => {
+  const groupRef = useRef<THREE.Group>(null);
+  
+  useFrame((state) => {
+    if (groupRef.current) {
+      const scrollY = window.scrollY;
+      const mouseX = state.mouse.x;
+      const mouseY = state.mouse.y;
+
+      // Parallax based on scroll
+      groupRef.current.position.y = scrollY * 0.001;
+
+      // Subtle rotation based on mouse
+      groupRef.current.rotation.y = mouseX * 0.05;
+      groupRef.current.rotation.x = mouseY * 0.05;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      <AbstractShape />
+      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+    </group>
   );
 };
 

@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Experience from './Experience';
+import { useCursor } from '../context/CursorContext';
 
 const Hero: React.FC = () => {
+  const { setCursorVariant } = useCursor();
   return (
     <section className="relative h-screen w-full flex flex-col justify-center items-center overflow-hidden">
       {/* 3D Background */}
-      <Experience />
+      {/* 3D Background - Moved to App.tsx for global parallax */}
 
       {/* Overlay Content */}
       <div className="z-10 text-center mix-blend-difference px-4">
@@ -14,8 +15,10 @@ const Hero: React.FC = () => {
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-          className="text-6xl md:text-9xl font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50"
-          style={{ WebkitTextStroke: '1px rgba(255,255,255,0.1)' }}
+          className="font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 leading-none"
+          style={{ fontSize: '15vw', WebkitTextStroke: '1px rgba(255,255,255,0.1)' }}
+          onMouseEnter={() => setCursorVariant('text')}
+          onMouseLeave={() => setCursorVariant('default')}
         >
           ARNAU GARCIA
         </motion.h1>
