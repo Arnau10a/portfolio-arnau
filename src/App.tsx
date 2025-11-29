@@ -1,5 +1,6 @@
 import React from 'react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
@@ -44,6 +45,7 @@ function App() {
         </Routes>
       </Router>
       <SpeedInsights />
+      <Analytics />
     </CursorProvider>
   );
 }
