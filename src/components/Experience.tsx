@@ -69,11 +69,16 @@ const ParallaxGroup = () => {
       const mouseX = state.mouse.x;
       const mouseY = state.mouse.y;
 
-      // Parallax based on scroll
-      groupRef.current.position.y = scrollY * 0.001;
+      // Enhanced Parallax based on scroll
+      // Move up faster
+      groupRef.current.position.y = scrollY * 0.005; 
+      // Rotate slightly as we scroll
+      groupRef.current.rotation.z = scrollY * 0.0002;
+      // Push back slightly for depth
+      groupRef.current.position.z = -scrollY * 0.002;
 
       // Subtle rotation based on mouse
-      groupRef.current.rotation.y = mouseX * 0.05;
+      groupRef.current.rotation.y = mouseX * 0.05 + scrollY * 0.0001;
       groupRef.current.rotation.x = mouseY * 0.05;
     }
   });
@@ -81,6 +86,15 @@ const ParallaxGroup = () => {
   return (
     <group ref={groupRef}>
       <AbstractShape />
+      {/* Add some floating particles/shapes for depth */}
+      <mesh position={[-4, 2, -5]} scale={0.5}>
+        <icosahedronGeometry args={[1, 0]} />
+        <meshStandardMaterial color="#333" wireframe />
+      </mesh>
+      <mesh position={[4, -3, -2]} scale={0.3}>
+        <icosahedronGeometry args={[1, 0]} />
+        <meshStandardMaterial color="#444" wireframe />
+      </mesh>
       <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
     </group>
   );

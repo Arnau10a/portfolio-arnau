@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ScrollReveal from './ScrollReveal';
 import { useCursor } from '../context/CursorContext';
 
 const Hero: React.FC = () => {
@@ -11,25 +12,21 @@ const Hero: React.FC = () => {
 
       {/* Overlay Content */}
       <div className="z-10 text-center mix-blend-difference px-4">
-        <motion.h1 
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-          className="font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 leading-none"
-          style={{ fontSize: '15vw', WebkitTextStroke: '1px rgba(255,255,255,0.1)' }}
-          onMouseEnter={() => setCursorVariant('text')}
-          onMouseLeave={() => setCursorVariant('default')}
-        >
-          ARNAU GARCIA
-        </motion.h1>
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="text-lg md:text-xl text-secondary uppercase tracking-[0.5em]"
-        >
-          Creative Developer & 3D Artist
-        </motion.p>
+        <ScrollReveal width="100%" delay={0.2}>
+          <h1 
+            className="font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 leading-none"
+            style={{ fontSize: '15vw', WebkitTextStroke: '1px rgba(255,255,255,0.1)' }}
+            onMouseEnter={() => setCursorVariant('text')}
+            onMouseLeave={() => setCursorVariant('default')}
+          >
+            ARNAU GARCIA
+          </h1>
+        </ScrollReveal>
+        <ScrollReveal width="100%" delay={0.4}>
+          <p className="text-lg md:text-xl text-secondary uppercase tracking-[0.5em]">
+            Creative Developer & 3D Artist
+          </p>
+        </ScrollReveal>
       </div>
 
       {/* Scroll Indicator */}
