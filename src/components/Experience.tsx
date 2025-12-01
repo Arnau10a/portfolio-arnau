@@ -60,22 +60,172 @@ const Experience: React.FC = () => {
   );
 };
 
+const PlexusParticles = () => {
+  const pointsRef = useRef<THREE.Points>(null);
+  const linesRef = useRef<THREE.LineSegments>(null);
+
+  // Configuration
+  const particleCount = 250; // Increased from 150
+  const connectionDistance = 3.5;
+  const areaSize = 30;
+  const mouseRepulsionRadius = 4;
+  const mouseRepulsionStrength = 0.5;
+
+  // Initialize particles
+  const [positions, velocities] = useMemo(() => {
+    const pos = new Float32Array(particleCount * 3);
+    const vel = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * areaSize;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * areaSize;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * areaSize;
+
+      vel[i * 3] = (Math.random() - 0.5) * 0.02;
+      vel[i * 3 + 1] = (Math.random() - 0.5) * 0.02;
+      vel[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
+    }
+    return [pos, vel];
+  }, []);
+
+  // Geometry for lines
+  const lineGeometry = useMemo(() => {
+    const geometry = new THREE.BufferGeometry();
+    const maxConnections = particleCount * 10; 
+    const positions = new Float32Array(maxConnections * 6); 
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    return geometry;
+  }, []);
+
+  useFrame((state) => {
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const progress = Math.min(Math.max(scrollY / windowHeight, 0), 1);
+    
+    // Mouse position in world space (approximate at z=0)
+    const { width, height } = state.viewport;
+    const mouseX = (state.mouse.x * width) / 2;
+    const mouseY = (state.mouse.y * height) / 2;
+
+    // Color Transition Logic
+    const particleColor = new THREE.Color('#ffffff').lerp(new THREE.Color('#000000'), progress);
+    
+    // Update Particles
+    if (pointsRef.current) {
+      const positionsAttr = pointsRef.current.geometry.attributes.position;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const px = positions[i * 3];
+        const py = positions[i * 3 + 1];
+
+        // Basic movement
+        let vx = velocities[i * 3];
+        let vy = velocities[i * 3 + 1];
+        let vz = velocities[i * 3 + 2];
+
+        // Mouse Repulsion
+        const dx = px - mouseX;
+        const dy = py - mouseY;
+        // We ignore Z for mouse interaction to treat it as a 2D plane interaction for better feel
+        const distSq = dx * dx + dy * dy; 
+
+        if (distSq < mouseRepulsionRadius * mouseRepulsionRadius) {
+          const dist = Math.sqrt(distSq);
+          const force = (mouseRepulsionRadius - dist) / mouseRepulsionRadius;
+          
+          // Push away
+          vx += (dx / dist) * force * mouseRepulsionStrength * 0.1;
+          vy += (dy / dist) * force * mouseRepulsionStrength * 0.1;
+        }
+
+        // Apply velocity
+        positions[i * 3] += vx;
+        positions[i * 3 + 1] += vy;
+        positions[i * 3 + 2] += vz;
+
+        // Boundary check - bounce
+        if (Math.abs(positions[i * 3]) > areaSize / 2) velocities[i * 3] *= -1;
+        if (Math.abs(positions[i * 3 + 1]) > areaSize / 2) velocities[i * 3 + 1] *= -1;
+        if (Math.abs(positions[i * 3 + 2]) > areaSize / 2) velocities[i * 3 + 2] *= -1;
+      }
+      
+      positionsAttr.needsUpdate = true;
+      
+      // Update material color
+      if (pointsRef.current.material instanceof THREE.PointsMaterial) {
+        pointsRef.current.material.color = particleColor;
+      }
+    }
+
+    // Update Lines
+    if (linesRef.current) {
+      const linePositions = linesRef.current.geometry.attributes.position.array as Float32Array;
+      let lineIndex = 0;
+      
+      for (let i = 0; i < particleCount; i++) {
+        for (let j = i + 1; j < particleCount; j++) {
+          const dx = positions[i * 3] - positions[j * 3];
+          const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+          const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+          const distSq = dx * dx + dy * dy + dz * dz;
+
+          if (distSq < connectionDistance * connectionDistance) {
+            linePositions[lineIndex++] = positions[i * 3];
+            linePositions[lineIndex++] = positions[i * 3 + 1];
+            linePositions[lineIndex++] = positions[i * 3 + 2];
+            
+            linePositions[lineIndex++] = positions[j * 3];
+            linePositions[lineIndex++] = positions[j * 3 + 1];
+            linePositions[lineIndex++] = positions[j * 3 + 2];
+          }
+        }
+      }
+      
+      linesRef.current.geometry.setDrawRange(0, lineIndex / 3);
+      linesRef.current.geometry.attributes.position.needsUpdate = true;
+      
+      if (linesRef.current.material instanceof THREE.LineBasicMaterial) {
+        linesRef.current.material.color = particleColor;
+        linesRef.current.material.opacity = 0.15 * (1 - progress) + 0.3 * progress;
+      }
+    }
+  });
+
+  return (
+    <group>
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={particleCount}
+            array={positions}
+            itemSize={3}
+            args={[positions, 3]} 
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.15}
+          color="#ffffff"
+          transparent
+          opacity={0.8}
+          sizeAttenuation={true}
+        />
+      </points>
+      <lineSegments ref={linesRef} geometry={lineGeometry}>
+        <lineBasicMaterial
+          color="#ffffff"
+          transparent
+          opacity={0.15}
+          depthWrite={false}
+        />
+      </lineSegments>
+    </group>
+  );
+};
+
 const ParallaxGroup = () => {
   const groupRef = useRef<THREE.Group>(null);
-  const starsRef = useRef<THREE.Points>(null);
   const { scene } = useThree();
-
-  // Generate star positions
-  const starPositions = useMemo(() => {
-    const count = 5000;
-    const positions = new Float32Array(count * 3);
-    for(let i = 0; i < count; i++) {
-      positions[i*3] = (Math.random() - 0.5) * 200;
-      positions[i*3+1] = (Math.random() - 0.5) * 200;
-      positions[i*3+2] = (Math.random() - 0.5) * 200;
-    }
-    return positions;
-  }, []);
   
   useFrame((state) => {
     if (groupRef.current) {
@@ -100,15 +250,6 @@ const ParallaxGroup = () => {
       // Background Color Transition (Dark -> White)
       const bgColor = new THREE.Color('#050505').lerp(new THREE.Color('#ffffff'), progress);
       scene.background = bgColor;
-
-      // Stars Color Transition (White -> Black)
-      if (starsRef.current && starsRef.current.material instanceof THREE.PointsMaterial) {
-        const starColor = new THREE.Color('#ffffff').lerp(new THREE.Color('#000000'), progress);
-        starsRef.current.material.color = starColor;
-        
-        // Optional: Rotate stars slightly
-        starsRef.current.rotation.y += 0.0002;
-      }
     }
   });
 
@@ -125,22 +266,8 @@ const ParallaxGroup = () => {
         <meshStandardMaterial color="#444" wireframe />
       </mesh>
       
-      {/* Custom Stars */}
-      <points ref={starsRef}>
-        <bufferGeometry>
-        <bufferAttribute 
-            attach="attributes-position" 
-            args={[starPositions, 3]} 
-          />
-        </bufferGeometry>
-        <pointsMaterial 
-          size={0.35} 
-          color="#ffffff" 
-          transparent 
-          opacity={0.8} 
-          sizeAttenuation={true} 
-        />
-      </points>
+      {/* Plexus Effect */}
+      <PlexusParticles />
     </group>
   );
 };
