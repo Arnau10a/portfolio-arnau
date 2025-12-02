@@ -10,6 +10,12 @@ const Loader: React.FC<LoaderProps> = ({ onFinished }) => {
   const { progress } = useProgress();
   const [displayProgress, setDisplayProgress] = useState(0);
 
+  const progressRef = React.useRef(progress);
+
+  useEffect(() => {
+    progressRef.current = progress;
+  }, [progress]);
+
   useEffect(() => {
     // Smoothly interpolate progress
     const interval = setInterval(() => {
@@ -21,14 +27,14 @@ const Loader: React.FC<LoaderProps> = ({ onFinished }) => {
         // If real progress is higher, catch up. If real progress is lower (unlikely but possible), wait.
         // We also want to ensure it always moves a bit to feel alive, but not past real progress too much unless it's done.
         // Actually, for a smoother feel, let's just move towards the target 'progress'.
-        const diff = progress - prev;
+        const diff = progressRef.current - prev;
         const step = Math.max(1, diff / 5); // Move 1/5th of the way or at least 1%
         return Math.min(100, prev + step);
       });
     }, 50);
 
     return () => clearInterval(interval);
-  }, [progress]);
+  }, []);
 
   useEffect(() => {
     if (displayProgress === 100) {

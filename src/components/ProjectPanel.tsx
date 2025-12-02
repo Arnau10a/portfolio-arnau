@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Atom, Box, Cpu, Globe, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import InteractiveModel from './InteractiveModel';
 
 export interface ProjectData {
@@ -27,6 +27,14 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({ project, index }) => {
   // Use provided images array or fallback to single image
   const projectImages = project.images && project.images.length > 0 ? project.images : [project.image];
 
+  useEffect(() => {
+    if (projectImages.length <= 1) return;
+    const timer = setTimeout(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % projectImages.length);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [currentImageIndex, projectImages.length]);
+
   const nextImage = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     setCurrentImageIndex((prev) => (prev + 1) % projectImages.length);
@@ -37,21 +45,10 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({ project, index }) => {
     setCurrentImageIndex((prev) => (prev - 1 + projectImages.length) % projectImages.length);
   };
 
-  const goToImage = (idx: number, e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    setCurrentImageIndex(idx);
-  };
+
 
   // Map tech stack to icons
-  const getTechIcon = (tech: string) => {
-    switch (tech) {
-      case 'react': return <Atom className="w-6 h-6 text-cyan-400" />;
-      case 'three': return <Box className="w-6 h-6 text-white" />;
-      case 'blender': return <Layers className="w-6 h-6 text-orange-400" />;
-      case 'webgl': return <Globe className="w-6 h-6 text-purple-400" />;
-      default: return <Cpu className="w-6 h-6 text-gray-400" />;
-    }
-  };
+
 
   return (
     <div className="w-full mb-24 relative">
@@ -78,35 +75,23 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({ project, index }) => {
               </div>
             </div>
 
-            {/* Tech Stack Bubbles */}
-            <div className="flex space-x-4 py-4">
-              {project.techStack.map((tech, i) => (
-                <div key={i} className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-sm shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:bg-white/10 transition-colors">
-                  {getTechIcon(tech)}
-                </div>
-              ))}
+            {/* Description */}
+            <div className="py-4 space-y-4">
+              <p className="text-xl text-gray-100 leading-relaxed font-light">
+                {project.description}
+              </p>
+              <div className="h-px w-12 bg-white/30" />
+              <p className="text-base text-gray-200">
+                Built with custom GLSL shaders and React Three Fiber for high performance.
+              </p>
             </div>
 
-            {/* Description & Visual Hook */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-              {/* Visual Hook (Interactive 3D Model) */}
-              <div className="relative aspect-square rounded-2xl overflow-hidden border border-white/10 bg-black/20 group">
-                 <InteractiveModel modelUrl={project.modelUrl} />
-                 
-                 {/* Overlay Grid Effect */}
-                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
-              </div>
-
-              {/* Text Description */}
-              <div className="flex flex-col justify-center h-full space-y-4">
-                <p className="text-lg text-gray-300 leading-relaxed font-light">
-                  {project.description}
-                </p>
-                <div className="h-px w-12 bg-white/30" />
-                <p className="text-sm text-gray-500">
-                  Built with custom GLSL shaders and React Three Fiber for high performance.
-                </p>
-              </div>
+            {/* Visual Hook (Interactive 3D Model) */}
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/20 group">
+               <InteractiveModel modelUrl={project.modelUrl} />
+               
+               {/* Overlay Grid Effect */}
+               <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
             </div>
           </div>
 
@@ -150,18 +135,7 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({ project, index }) => {
                     <ChevronRight className="w-6 h-6" />
                   </button>
 
-                  {/* Pagination Dots */}
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
-                    {projectImages.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={(e) => goToImage(idx, e)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                          idx === currentImageIndex ? 'bg-white w-6' : 'bg-white/40 hover:bg-white/80'
-                        }`}
-                      />
-                    ))}
-                  </div>
+
                 </>
               )}
 
@@ -170,9 +144,22 @@ const ProjectPanel: React.FC<ProjectPanelProps> = ({ project, index }) => {
                 {String(index + 1).padStart(2, '0')}
               </div>
 
-              {/* Year */}
-              <div className="absolute bottom-6 right-8 text-6xl md:text-8xl font-light text-white/90 font-mono tracking-tighter pointer-events-none">
-                '{project.year.slice(-2)}
+              {/* Year & Progress */}
+              <div className="absolute bottom-6 right-8 flex flex-col items-end pointer-events-none gap-2 z-20">
+                <div className="text-6xl md:text-8xl font-light text-white/90 font-mono tracking-tighter leading-none">
+                  '{project.year.slice(-2)}
+                </div>
+                {projectImages.length > 1 && (
+                  <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
+                    <motion.div
+                      key={currentImageIndex}
+                      initial={{ width: "0%" }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: 5, ease: "linear" }}
+                      className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Shine Effect */}
