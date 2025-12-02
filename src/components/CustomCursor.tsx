@@ -43,7 +43,7 @@ const CustomCursor: React.FC = () => {
     default: {
       height: 32,
       width: 32,
-      backgroundColor: "transparent",
+      backgroundColor: "rgba(255, 255, 255, 0)",
       border: "1px solid rgba(255, 255, 255, 0.5)",
     },
     text: {

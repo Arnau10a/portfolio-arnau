@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import { useCursor } from '../context/CursorContext';
-import DecryptedText from './DecryptedText';
+import LiquidHover from './LiquidHover';
 
 const Hero: React.FC = () => {
   const { setCursorVariant } = useCursor();
@@ -12,19 +12,14 @@ const Hero: React.FC = () => {
       {/* 3D Background - Moved to App.tsx for global parallax */}
 
       {/* Overlay Content */}
-      <div className="z-10 text-center mix-blend-difference px-4">
+      <div className="z-10 text-center mix-blend-difference w-full">
         <ScrollReveal width="100%" delay={0.2}>
           <div 
-            className="relative cursor-default"
+             className="relative cursor-default w-full"
             onMouseEnter={() => setCursorVariant('text')}
             onMouseLeave={() => setCursorVariant('default')}
           >
-             <DecryptedText 
-              text="ARNAU GARCIA"
-              speed={30}
-              className="text-8xl md:text-[12rem] font-[100] tracking-tighter mb-4 text-white leading-none hover:font-[900] transition-all duration-700"
-              characters="ARNAUGARCIA1234567890"
-            />
+             <LiquidHover />
           </div>
         </ScrollReveal>
         <ScrollReveal width="100%" delay={0.4}>

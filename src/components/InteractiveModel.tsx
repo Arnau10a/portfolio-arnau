@@ -38,7 +38,7 @@ const InteractiveModel: React.FC<InteractiveModelProps> = ({ modelUrl }) => {
   return (
     <div className="w-full h-full min-h-[200px] cursor-move bg-[#393939] relative overflow-hidden">
       <Canvas shadows dpr={[1, 2]} camera={{ fov: 50 }}>
-        <color attach="background" args={['#4e4e4eff']} />
+        <color attach="background" args={['#4e4e4e']} />
         
         <Suspense fallback={null}>
           <Stage environment="city" intensity={0.6} adjustCamera={false} shadows={false}>
