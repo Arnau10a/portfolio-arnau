@@ -41,14 +41,14 @@ const InteractiveModel: React.FC<InteractiveModelProps> = ({ modelUrl }) => {
         <color attach="background" args={['#4e4e4e']} />
         
         <Suspense fallback={null}>
-          <Stage environment="city" intensity={0.6} adjustCamera={false} shadows={false}>
+          <Stage environment="studio" intensity={0.6} adjustCamera={false} shadows={false}>
             {modelUrl ? <Model url={modelUrl} /> : <PlaceholderModel />}
           </Stage>
         </Suspense>
         <OrbitControls autoRotate autoRotateSpeed={1} enableZoom={true} />
       </Canvas>
     </div>
-  );
+  );  
 };
 
 export default InteractiveModel;

@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import { useCursor } from '../context/CursorContext';
-import LiquidHover from './LiquidHover';
 
 const Hero: React.FC = () => {
   const { setCursorVariant } = useCursor();
@@ -19,7 +18,7 @@ const Hero: React.FC = () => {
             onMouseEnter={() => setCursorVariant('text')}
             onMouseLeave={() => setCursorVariant('default')}
           >
-             <LiquidHover />
+            <h1 className="font-bold tracking-tighter leading-none whitespace-nowrap" style={{ fontSize: 'clamp(3rem, 10vw, 12rem)', fontFamily: "'Syne', sans-serif" }}>ARNAU GARCIA</h1>
           </div>
         </ScrollReveal>
         <ScrollReveal width="100%" delay={0.4}>
