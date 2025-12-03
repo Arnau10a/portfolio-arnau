@@ -218,7 +218,7 @@ const LiquidHover: React.FC = () => {
       <div className="relative z-10 w-full mix-blend-multiply bg-black flex items-center justify-center">
          <h1 
           className="leading-none font-black text-white uppercase tracking-tighter text-center select-none whitespace-nowrap"
-          style={{ fontSize: '22vw' }}
+          style={{ fontSize: '10vw' }}
         >
           Arnau Garcia
         </h1>

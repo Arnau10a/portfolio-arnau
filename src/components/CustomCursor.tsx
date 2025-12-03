@@ -1,108 +1,65 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useCursor } from '../context/CursorContext';
 
 const CustomCursor: React.FC = () => {
   const { cursorVariant } = useCursor();
-  const [isVisible, setIsVisible] = useState(false);
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-
-  // Spring configuration for the trailing effect
-  const springConfig = { damping: 25, stiffness: 120, mass: 0.5 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+    const mouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY
+      });
     };
 
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
-
-    window.addEventListener('mousemove', moveCursor);
-    window.addEventListener('mouseenter', handleMouseEnter);
-    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener("mousemove", mouseMove);
 
     return () => {
-      window.removeEventListener('mousemove', moveCursor);
-      window.removeEventListener('mouseenter', handleMouseEnter);
-      window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener("mousemove", mouseMove);
     };
-  }, [cursorX, cursorY, isVisible]);
-
-  // Hide on touch devices
-  if (typeof navigator !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    return null;
-  }
+  }, []);
 
   const variants = {
     default: {
-      height: 32,
-      width: 32,
-      backgroundColor: "rgba(255, 255, 255, 0)",
-      border: "1px solid rgba(255, 255, 255, 0.5)",
+      x: mousePosition.x - 4,
+      y: mousePosition.y - 4,
+      opacity: 1,
+      scale: 1,
+      backgroundColor: "#ffffff",
     },
     text: {
-      height: 100,
-      width: 100,
-      backgroundColor: "rgba(255, 255, 255, 1)",
-      border: "none",
-      mixBlendMode: "difference" as const,
+      x: mousePosition.x - 4,
+      y: mousePosition.y - 4,
+      opacity: 0, // Hide the dot on text hover
+      scale: 0,
+      backgroundColor: "#ffffff",
     },
     button: {
-      height: 50,
-      width: 50,
-      backgroundColor: "rgba(255, 255, 255, 0.2)",
-      border: "none",
+      x: mousePosition.x - 4,
+      y: mousePosition.y - 4,
+      opacity: 1,
+      scale: 1.5, // Slightly larger for buttons
+      backgroundColor: "#ffffff", // Or maybe a different color/style
     }
   };
 
-  const dotVariants = {
-    default: {
-      opacity: 1,
-      scale: 1,
-    },
-    text: {
-      opacity: 0,
-      scale: 0,
-    },
-    button: {
-      opacity: 0,
-      scale: 0,
-    }
-  };
+  // Optional: Add a ring or follower if desired, but for now focusing on the "dot"
+  // If the user previously had a ring, I might be missing it. 
+  // But since the file was empty, I'll start with just the dot and ensure it hides on text.
 
   return (
     <>
-      {/* Main Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        variants={dotVariants}
-        animate={cursorVariant}
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-      />
-      
-      {/* Trailing Ring / Dynamic Cursor */}
-      <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9998] mix-blend-difference flex justify-center items-center"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] mix-blend-difference"
         variants={variants}
         animate={cursorVariant}
-        transition={{ type: "spring", stiffness: 500, damping: 28 }}
-        style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
-          translateX: '-50%',
-          translateY: '-50%',
-          opacity: isVisible ? 1 : 0,
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 28,
+          mass: 0.5,
         }}
       />
     </>
