@@ -10,7 +10,7 @@ const Home: React.FC = () => {
   return (
     <>
       <Hero />
-      <ProjectGrid />
+      {/* <ProjectGrid /> */}
     </>
   );
 };
