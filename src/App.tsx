@@ -4,13 +4,12 @@ import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
-import ProjectGrid from './components/ProjectGrid';
+
 
 const Home: React.FC = () => {
   return (
     <>
       <Hero />
-      {/* <ProjectGrid /> */}
     </>
   );
 };

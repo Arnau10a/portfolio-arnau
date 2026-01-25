@@ -43,11 +43,8 @@ src/
 - **Color Transition**: The background color and particle colors smoothly transition from dark to light (or vice versa) based on the scroll position.
 
 ### 2. Custom Interaction System
-- **Custom Cursor**: A highly responsive cursor that changes shape and size when hovering over interactable elements.
-- **Decrypted Text**: Typography that performs a "scanning" animation.
-
-> [!NOTE]
-> The **Project Grid** is currently disabled to focus on the landing experience (`Hero` section).
+- **Custom Cursor**: A highly responsive cursor that changes shape and size when hovering over interactable elements (e.g., text, projects).
+- **Decrypted Text**: Typography that performs a "scanning" or "decrypting" animation using random characters before settling on the target text.
 
 ### 3. Responsive & Performant
 - **Dynamic Sizing**: Uses `clamp()` and relative units for fluid typography across all screen sizes.
