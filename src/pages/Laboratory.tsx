@@ -1,22 +1,22 @@
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import { ArrowLeft, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const specimens = [
-  { id: 1, name: 'GENESIS_CORE', epoch: 400, image: '/assets/laboratory/start.png', type: 'ORIGIN' },
-  { id: 2, name: 'FLORA_ALPHA', epoch: 415, image: '/assets/laboratory/GENERATIVE_FLORA.png', type: 'ORGANIC' },
-  { id: 3, name: 'NEURAL_STEM', epoch: 430, image: '/assets/laboratory/GENERATIVE_FLORA (2).png', type: 'SYNTHETIC' },
-  { id: 4, name: 'CORTEX_BLOOM', epoch: 445, image: '/assets/laboratory/GENERATIVE_FLORA (3).png', type: 'HYBRID' },
-  { id: 5, name: 'SYNAPSE_LEAF', epoch: 460, image: '/assets/laboratory/GENERATIVE_FLORA (4).png', type: 'ORGANIC' },
-  { id: 6, name: 'VOID_PETAL', epoch: 490, image: '/assets/laboratory/GENERATIVE_FLORA (6).png', type: 'SYNTHETIC' },
-  { id: 7, name: 'DATA_SPORE', epoch: 505, image: '/assets/laboratory/GENERATIVE_FLORA (7).png', type: 'HYBRID' },
-  { id: 8, name: 'CYBER_ROOT', epoch: 520, image: '/assets/laboratory/GENERATIVE_FLORA (8).png', type: 'ORGANIC' },
-  { id: 9, name: 'LOGIC_FERN', epoch: 535, image: '/assets/laboratory/GENERATIVE_FLORA (9).png', type: 'SYNTHETIC' },
-  { id: 10, name: 'MATRIX_MOSS', epoch: 550, image: '/assets/laboratory/GENERATIVE_FLORA (10).png', type: 'HYBRID' },
-  { id: 11, name: 'QUANTUM_VINE', epoch: 565, image: '/assets/laboratory/GENERATIVE_FLORA (11).png', type: 'ORGANIC' },
-  { id: 12, name: 'BINARY_BUD', epoch: 580, image: '/assets/laboratory/GENERATIVE_FLORA (12).png', type: 'SYNTHETIC' },
+  { id: 1, name: 'GENESIS_CORE', epoch: 400, image: '/assets/laboratory/start.webp', type: 'ORIGIN' },
+  { id: 2, name: 'FLORA_ALPHA', epoch: 415, image: '/assets/laboratory/GENERATIVE_FLORA.webp', type: 'ORGANIC' },
+  { id: 3, name: 'NEURAL_STEM', epoch: 430, image: '/assets/laboratory/GENERATIVE_FLORA (2).webp', type: 'SYNTHETIC' },
+  { id: 4, name: 'CORTEX_BLOOM', epoch: 445, image: '/assets/laboratory/GENERATIVE_FLORA (3).webp', type: 'HYBRID' },
+  { id: 5, name: 'SYNAPSE_LEAF', epoch: 460, image: '/assets/laboratory/GENERATIVE_FLORA (4).webp', type: 'ORGANIC' },
+  { id: 6, name: 'VOID_PETAL', epoch: 490, image: '/assets/laboratory/GENERATIVE_FLORA (6).webp', type: 'SYNTHETIC' },
+  { id: 7, name: 'DATA_SPORE', epoch: 505, image: '/assets/laboratory/GENERATIVE_FLORA (7).webp', type: 'HYBRID' },
+  { id: 8, name: 'CYBER_ROOT', epoch: 520, image: '/assets/laboratory/GENERATIVE_FLORA (8).webp', type: 'ORGANIC' },
+  { id: 9, name: 'LOGIC_FERN', epoch: 535, image: '/assets/laboratory/GENERATIVE_FLORA (9).webp', type: 'SYNTHETIC' },
+  { id: 10, name: 'MATRIX_MOSS', epoch: 550, image: '/assets/laboratory/GENERATIVE_FLORA (10).webp', type: 'HYBRID' },
+  { id: 11, name: 'QUANTUM_VINE', epoch: 565, image: '/assets/laboratory/GENERATIVE_FLORA (11).webp', type: 'ORGANIC' },
+  { id: 12, name: 'BINARY_BUD', epoch: 580, image: '/assets/laboratory/GENERATIVE_FLORA (12).webp', type: 'SYNTHETIC' },
 ];
 
 const Laboratory = () => {
@@ -41,6 +41,14 @@ const Laboratory = () => {
     });
 
     const activeSpecimen = specimens[activeIndex];
+
+    // Preload images
+    useEffect(() => {
+        specimens.forEach((specimen) => {
+            const img = new Image();
+            img.src = specimen.image;
+        });
+    }, []);
 
     return (
         <div className="bg-[#030303] min-h-screen w-full text-white font-sans selection:bg-cyan-500/30">
