@@ -1,9 +1,24 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import TubesCursor from 'threejs-components/build/cursors/tubes1.min.js';
 
 const SparklingBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Hide cursor effect if scrolled down more than 50px
+      if (window.scrollY > 50) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -21,49 +36,8 @@ const SparklingBackground = () => {
       }
     });
 
-    // Logic to toggle visibility based on #work section
-    let observer: IntersectionObserver | null = null;
-    const checkForWorkSection = () => {
-      const workSection = document.getElementById('work');
-      if (workSection && canvasRef.current) {
-        observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (canvasRef.current) {
-                // If work section is visible (intersecting), hide the background
-                // We use a transition for smooth effect
-                canvasRef.current.style.transition = 'opacity 0.5s ease-in-out';
-                canvasRef.current.style.opacity = entry.isIntersecting ? '0' : '1';
-              }
-            });
-          },
-          { threshold: 0.1 } // Trigger when 10% of the work section is visible
-        );
-        observer.observe(workSection);
-        return true;
-      }
-      return false;
-    };
-
-    // Try to find the section immediately, or poll for it
-    if (!checkForWorkSection()) {
-      const intervalId = setInterval(() => {
-        if (checkForWorkSection()) {
-          clearInterval(intervalId);
-        }
-      }, 500);
-      
-      // Clear interval on cleanup if it's still running
-      return () => {
-        clearInterval(intervalId);
-        observer?.disconnect();
-        // app.destroy?.();
-      };
-    }
-
     return () => {
-      observer?.disconnect();
-      // app.destroy?.(); 
+      // Cleanup logic if supported by the library, otherwise it just unmounts
     };
   }, []);
 
@@ -81,9 +55,10 @@ const SparklingBackground = () => {
         height: '100%',
         overflow: 'hidden',
         pointerEvents: 'none', // Allow clicks to pass through
-        zIndex: -1, // Behind everything
-        mixBlendMode: 'lighten', // Ensure black background is transparent-ish
-        opacity: 1, // Start visible
+        zIndex: 51, 
+        mixBlendMode: 'lighten', 
+        opacity: isVisible ? 1 : 0, 
+        transition: 'opacity 0.3s ease-in-out'
       }}
     />
   );
