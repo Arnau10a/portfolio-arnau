@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
 
-type CursorVariant = 'default' | 'text' | 'button';
+type CursorVariant = 'default' | 'text' | 'button' | 'project' | 'hidden';
 
 interface CursorContextType {
   cursorVariant: CursorVariant;

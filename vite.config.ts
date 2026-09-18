@@ -10,5 +10,16 @@ export default defineConfig({
       'three': 'three',
     },
     dedupe: ['three', 'r3f-perf']
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three', '@react-three/fiber', '@react-three/drei'],
+          motion: ['framer-motion'],
+          vendor: ['react', 'react-dom', 'react-router-dom', 'lucide-react']
+        }
+      }
+    }
   }
 })

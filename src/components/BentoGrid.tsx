@@ -1,202 +1,292 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ExternalLink, Code, Box, Cpu, Palette } from 'lucide-react';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ExternalLink, Github, Terminal, Cpu, Layers } from 'lucide-react';
+import { useCursor } from '../context/CursorContext';
 
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-interface BentoItemProps {
+interface EngineeringProject {
+  id: string;
+  num: string;
   title: string;
-  description: string;
-  className?: string;
-  icon?: React.ReactNode;
-  tags?: string[];
-  link?: string;
-  image?: string;
+  subtitle: string;
+  field: string;
+  year: string;
+  image: string;
+  accent: string;
+  githubUrl?: string;
+  architecture: {
+    overview: string;
+    coreChallenge: string;
+    engineeringSolution: string;
+  };
+  metrics: { label: string; value: string; detail: string }[];
+  stack: string[];
 }
 
-const BentoItem = ({ title, description, className, icon, tags, link, image, variant = 'default' }: BentoItemProps & { variant?: 'default' | 'laboratory' }) => {
+const projects: EngineeringProject[] = [
+  {
+    id: "nuclear-vr",
+    num: "01",
+    title: "NuclearVerse VR",
+    subtitle: "Tokamak Fusion Reactor Maintenance & Procedure Validation System",
+    field: "XR Systems & Distributed AI",
+    year: "2024",
+    image: "/assets/projects/fusion_reactor_vr_nano_banana.webp",
+    accent: "#06b6d4",
+    architecture: {
+      overview: "Holographic VR twin engineered for ITER/DEMO fusion reactors. Enables operators to rehearse critical component replacement inside high-radiation plasma chambers before real-world actuation.",
+      coreChallenge: "Real-time physics collisions and sub-millimeter positioning inside complex toroidal geometries with zero spatial tracking latency under head-mounted constraints.",
+      engineeringSolution: "Custom 1:1 physics constraints engine in C#/Unity, integrated with a localized RAG agent that streams indexed engineering manuals via microsecond vector searches directly to the user's HUD."
+    },
+    metrics: [
+      { label: "Spatial Scale", value: "1:1 Isometric", detail: "Micrometer precision" },
+      { label: "AI Retrieval", value: "Local RAG", detail: "Zero-latency pipeline" },
+      { label: "Environment", value: "ITER Standard", detail: "Physics verified" }
+    ],
+    stack: ["Unity", "C#", "Spatial Computing", "RAG Pipeline", "Vector Embeddings", "XR Interaction"]
+  },
+  {
+    id: "humanoid-robotics",
+    num: "02",
+    title: "Humanoid Grasping",
+    subtitle: "Autonomous Multi-Fingered Manipulation via Point Cloud Telemetry",
+    field: "Robotics & Computer Vision",
+    year: "2024",
+    image: "/assets/projects/robotic_grasping_nano_banana.webp",
+    accent: "#a855f7",
+    githubUrl: "https://github.com/Arnau10a/Humanoid-Robots-Grasping",
+    architecture: {
+      overview: "Deep perception pipeline converting unstructured 3D point clouds from RGB-D sensors into feasible kinematic grasp poses for anthropomorphic robotic hands.",
+      coreChallenge: "Synthesizing stable multi-contact grasp points on arbitrary non-convex geometries in real time without pre-existing CAD meshes.",
+      engineeringSolution: "Implemented surface normal curvature estimation coupled with GraspIt! energy heuristics over ROS nodes, computing optimal force-closure candidates within 80ms."
+    },
+    metrics: [
+      { label: "Inference Time", value: "< 80 ms", detail: "Real-time perception" },
+      { label: "Kinematics", value: "16-DOF Hand", detail: "Force closure target" },
+      { label: "Middleware", value: "ROS / C++", detail: "Zero IPC loss" }
+    ],
+    stack: ["ROS", "C++", "Python", "Point Cloud (PCL)", "GraspIt!", "Computer Vision"]
+  },
+  {
+    id: "reinforcement-learning",
+    num: "03",
+    title: "Fantasy RL Agent",
+    subtitle: "Deep Q-Network Policy Optimization in Stochastic Multi-Agent Markets",
+    field: "Reinforcement Learning & Systems",
+    year: "2024",
+    image: "/assets/projects/fantasy_rl_nano_banana.webp",
+    accent: "#22c55e",
+    githubUrl: "https://github.com/Arnau10a/Fantasy_Machine_learning",
+    architecture: {
+      overview: "Custom Gymnasium simulation environment modelling complex weekly draft dynamics, budget constraints, and injury probabilities for predictive transfer optimization.",
+      coreChallenge: "Extremely high dimensional discrete action space (>10^8 combinations) subject to non-stationary rewards and strict budget caps.",
+      engineeringSolution: "Formulated a prioritized experience replay Deep Q-Network (DQN) with target network stabilization and epsilon-decay exploration schedule, yielding a 98.4% policy convergence."
+    },
+    metrics: [
+      { label: "Convergence", value: "98.4%", detail: "Policy optimality" },
+      { label: "Framework", value: "Gymnasium", detail: "Custom step physics" },
+      { label: "Model Architecture", value: "DQN + PER", detail: "Deep Q-Network" }
+    ],
+    stack: ["Python", "PyTorch", "Gymnasium", "Deep Q-Learning", "Experience Replay", "NumPy"]
+  }
+];
+
+const ProjectCase: React.FC<{ project: EngineeringProject }> = ({ project }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { setCursorVariant } = useCursor();
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.4, 1, 1, 0.4]);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: -5 }}
-      className={cn(
-        "group relative overflow-hidden rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm transition-all duration-300 flex flex-col justify-between",
-        variant === 'laboratory' ? "hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]" : "hover:bg-white/10",
-        className,
-        (image || variant === 'laboratory') ? "p-0" : "p-6"
-      )}
+    <article
+      ref={containerRef}
+      className="relative min-h-screen w-full flex flex-col justify-center py-24 md:py-36 border-t border-white/[0.06]"
     >
-      {/* Standard Background Image Logic */}
-      {(image && variant !== 'laboratory') && (
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={image} 
-            alt={title} 
-            className="w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-40 transition-all duration-700" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-        </div>
-      )}
-
-      {/* Laboratory Variant Specific Logic */}
-      {variant === 'laboratory' && image && (
-        <div className="absolute inset-0 z-0 bg-black">
-          {/* Main Image - Grayscale by default, Color on Hover */}
-          <div className="absolute inset-0 z-0">
-             <img 
-              src={image} 
-              alt="LABORATORY_START" 
-              className="w-full h-full object-cover transition-all duration-500 filter grayscale brightness-75 contrast-125 group-hover:grayscale-0 group-hover:brightness-100 group-hover:contrast-100" 
-            />
+      <motion.div style={{ opacity }} className="max-w-7xl mx-auto px-6 md:px-12 w-full">
+        
+        {/* Editorial Header Row */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-white/[0.08]">
+          <div className="space-y-3">
+            <div className="flex items-center gap-4 text-xs font-mono tracking-[0.25em] text-gray-400">
+              <span className="text-white font-semibold">{project.num}</span>
+              <span className="h-px w-6 bg-white/20" />
+              <span style={{ color: project.accent }} className="font-semibold uppercase">
+                {project.field}
+              </span>
+            </div>
+            <h3 
+              className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white uppercase leading-none"
+              style={{ fontFamily: 'var(--font-syne)' }}
+            >
+              {project.title}
+            </h3>
+            <p className="text-sm md:text-base text-gray-300 font-sans max-w-2xl font-light">
+              {project.subtitle}
+            </p>
           </div>
-          
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20" />
-           
-           {/* Overlay Lines */}
-           <div className="absolute inset-0 z-30 opacity-20 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,#000_3px)]" />
-        </div>
-      )}
 
-      <div className={cn("relative z-20 flex flex-col justify-between h-full", (image || variant === 'laboratory') ? "p-6" : "")}>
-        <div>
-          <div className={cn(
-            "mb-4 inline-flex items-center justify-center p-3 rounded-2xl border transition-all duration-500 backdrop-blur-md",
-            variant === 'laboratory' 
-              ? "bg-black/50 border-cyan-500/30 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black group-hover:shadow-[0_0_20px_cyan]" 
-              : "bg-white/10 border-white/10 group-hover:scale-110 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/50"
-          )}>
-            {icon}
+          <div className="flex items-center gap-4 font-mono text-xs text-gray-400">
+            <span>RELEASE // {project.year}</span>
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => setCursorVariant('button')}
+                onMouseLeave={() => setCursorVariant('default')}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 hover:border-white/40 text-white transition-all bg-white/[0.02]"
+              >
+                <Github size={13} />
+                <span>Source Code</span>
+                <ExternalLink size={11} className="opacity-50" />
+              </a>
+            )}
           </div>
-          <h3 className={cn("text-xl font-bold mb-2", variant === 'laboratory' ? "font-mono tracking-widest text-cyan-50" : "text-white")}>
-            {variant === 'laboratory' ? "[ GENERATIVE_FLORA ]" : title}
-          </h3>
-          <p className="text-sm text-gray-300 leading-relaxed font-sans">{description}</p>
+        </div>
+
+        {/* Editorial Split Layout: Interactive Viewport + Technical Dossier */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-12 items-start">
           
-          {tags && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <span key={tag} className={cn(
-                  "px-2 py-1 text-[10px] uppercase tracking-widest rounded-md backdrop-blur-sm border",
-                  variant === 'laboratory'
-                    ? "bg-black/80 border-cyan-900/50 text-cyan-400"
-                    : "bg-white/10 border-white/10 text-gray-300"
-                )}>
-                  {tag}
+          {/* Left: Viewport Preview (Frameless, Cinematic) */}
+          <div className="lg:col-span-7">
+            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 group shadow-2xl">
+              <motion.img
+                src={project.image}
+                alt={project.title}
+                style={{ y: imageY }}
+                className="w-full h-[116%] object-cover object-center filter brightness-90 group-hover:brightness-100 group-hover:scale-105 transition-all duration-700 ease-out"
+              />
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-40 group-hover:opacity-20 transition-opacity duration-700"
+                style={{
+                  background: `linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 50%), radial-gradient(circle at top right, ${project.accent}25, transparent 60%)`
+                }}
+              />
+              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-[11px] font-mono text-gray-300 bg-black/60 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/10">
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: project.accent }} />
+                  TELEMETRY VERIFIED
                 </span>
+                <span className="tracking-widest opacity-60 font-mono">CASE ID: {project.id.toUpperCase()}</span>
+              </div>
+            </div>
+
+            {/* Engineering Metrics Strip */}
+            <div className="grid grid-cols-3 gap-4 mt-6">
+              {project.metrics.map((metric, i) => (
+                <div key={i} className="p-4 rounded-xl border border-white/[0.06] bg-white/[0.01]">
+                  <p className="text-[10px] font-mono tracking-widest text-gray-400 uppercase mb-1">
+                    {metric.label}
+                  </p>
+                  <p className="text-lg md:text-xl font-bold font-mono text-white tracking-tight">
+                    {metric.value}
+                  </p>
+                  <p className="text-[11px] text-gray-400 font-sans mt-0.5 font-light">
+                    {metric.detail}
+                  </p>
+                </div>
               ))}
             </div>
-          )}
+          </div>
+
+          {/* Right: Technical Architecture Dossier */}
+          <div className="lg:col-span-5 space-y-8">
+            
+            {/* Overview */}
+            <div>
+              <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-gray-400 uppercase mb-3">
+                <Terminal size={13} style={{ color: project.accent }} />
+                <span>Executive Architecture</span>
+              </div>
+              <p className="text-sm md:text-base text-gray-200 leading-relaxed font-sans font-light">
+                {project.architecture.overview}
+              </p>
+            </div>
+
+            {/* Core Engineering Problem */}
+            <div className="border-l-2 border-white/10 pl-5 space-y-2">
+              <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-gray-400 uppercase">
+                <Cpu size={12} className="text-white/60" />
+                <span>The Core Challenge</span>
+              </div>
+              <p className="text-xs md:text-sm text-gray-300 leading-relaxed font-sans font-light">
+                {project.architecture.coreChallenge}
+              </p>
+            </div>
+
+            {/* Engineering Solution */}
+            <div className="border-l-2 pl-5 space-y-2" style={{ borderColor: `${project.accent}80` }}>
+              <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase" style={{ color: project.accent }}>
+                <Layers size={12} />
+                <span>Technical Implementation</span>
+              </div>
+              <p className="text-xs md:text-sm text-gray-200 leading-relaxed font-sans font-light">
+                {project.architecture.engineeringSolution}
+              </p>
+            </div>
+
+            {/* Stack Tags */}
+            <div>
+              <p className="text-[10px] font-mono tracking-widest text-gray-400 uppercase mb-3">
+                Technology Stack
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="text-[11px] font-mono px-3 py-1 rounded-md border border-white/10 text-gray-300 bg-white/[0.02]"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
-        <div className="mt-6 flex items-center justify-between">
-          {(link || variant === 'laboratory') && (
-            <a
-              href={link || "/laboratory"} 
-              target={variant === 'laboratory' ? "_self" : "_blank"}
-              rel="noopener noreferrer"
-              className={cn(
-                "flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors",
-                variant === 'laboratory' ? "text-cyan-300 group-hover:text-white group-hover:drop-shadow-[0_0_5px_cyan]" : "text-cyan-400 hover:text-cyan-300"
-              )}
-            >
-              {variant === 'laboratory' ? "INITIALIZE_SCAN" : "Explore"} <ExternalLink size={14} />
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* Decorative background element - only show if no image */}
-      {!image && (
-        <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full group-hover:bg-cyan-500/20 transition-all duration-500" />
-      )}
-    </motion.div>
+      </motion.div>
+    </article>
   );
 };
 
-const BentoGrid = () => {
-  const items = [
-    {
-        title: "The Laboratory",
-        description: "Experimental synthetic biology visualization using WebGL and generative algorithms.",
-        className: "md:col-span-2 md:row-span-2",
-        icon: <Cpu className="w-6 h-6" />,
-        tags: ["WebGL", "Shaders", "Generative", "React Three Fiber"],
-        image: "/assets/laboratory/start.png",
-        variant: "laboratory" as const, // Explicit literal type
-        link: "/laboratory"
-    },
-    {
-      title: "NuclearVerse - Bachelor's Thesis",
-      description: "Comprehensive VR solution for fusion reactor maintenance (ITER/DEMO). Features 1:1 scale simulation, physics-based validations, and an offline AI Assistant (RAG+LLM).",
-      className: "md:col-span-2 md:row-span-1", // Adjusted to standard
-      icon: <Box className="text-cyan-400" />,
-      tags: ["Unity", "VR", "LLM", "RAG", "C#", "Nuclear Fusion", "Simulation"],
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2670"
-    },
-    { 
-      title: "Humanoid Grasping",
-      description: "Robotic perception pipeline combining GraspIt! and GPD for optimal scene understanding.",
-      className: "md:col-span-1 md:row-span-1",
-      icon: <Cpu className="text-purple-400" />,
-      tags: ["Robotics", "Computer Vision", "Python"],
-      link: "https://github.com/Arnau10a/Humanoid-Robots-Grasping"
-    },
-    {
-      title: "AI Agents",
-      description: "Reinforcement Learning models trained for complex decision making in financial markets.",
-      className: "md:col-span-1 md:row-span-2",
-      icon: <Code className="text-emerald-400" />,
-      tags: ["Reinforcement Learning", "Python", "AI"],
-      link: "https://github.com/Arnau10a/Bitcoin-Trading-Reinforcement-Learning-Agent"
-    },
-    {
-      title: "Automation & ML",
-      description: "Scripts for social media automation and fantasy sports prediction.",
-      className: "md:col-span-1 md:row-span-1",
-      icon: <Cpu className="text-orange-400" />,
-      tags: ["Python", "APIs", "Data"]
-    },
-    {
-      title: "CS Fundamentals",
-      description: "Algorithmic problem solving and data structures implementation.",
-      className: "md:col-span-1 md:row-span-1",
-      icon: <Code className="text-white" />,
-      tags: ["C++", "Algorithms", "Optimization"],
-      link: "https://github.com/Arnau10a/PRO2-jutge-FIB"
-    },
-    {
-      title: "Creative Engineering",
-      description: "Intersection of User Interface Design and Natural Language Processing.",
-      className: "md:col-span-2 md:row-span-1",
-      icon: <Palette className="text-pink-400" />,
-      tags: ["UI/UX", "NLP", "Design"],
-      link: "https://github.com/Arnau10a/BIE-TUR"
-    }
-  ];
-
+const BentoGrid: React.FC = () => {
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto w-full">
-      <div className="mb-12">
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4" style={{ fontFamily: "'Syne', sans-serif" }}>
-          THE LABORATORY
-        </h2>
-        <p className="text-gray-400 max-w-2xl font-sans">
-          A collection of experiments and projects exploring the intersection of human interaction and spatial computing.
-        </p>
-      </div>
+    <section id="projects" className="relative w-full bg-[#030303]">
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
-        {items.map((item, index) => (
-          <BentoItem key={index} {...item} />
+      {/* Section Headline Banner */}
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/[0.08] pb-8">
+          <div>
+            <span className="text-xs font-mono tracking-[0.3em] text-cyan-400 uppercase block mb-3">
+              Selected Systems Engineering
+            </span>
+            <h2 
+              className="text-4xl md:text-6xl font-black tracking-tight text-white uppercase"
+              style={{ fontFamily: 'var(--font-syne)' }}
+            >
+              Featured Work
+            </h2>
+          </div>
+          <p className="text-xs md:text-sm text-gray-400 font-mono max-w-sm">
+            Deep technical case studies spanning spatial computing, autonomous robotics kinematics, and reinforcement learning.
+          </p>
+        </div>
+      </div>
+
+      {/* Full-bleed scroll narrative cases */}
+      <div className="w-full">
+        {projects.map((project) => (
+          <ProjectCase key={project.id} project={project} />
         ))}
       </div>
+
     </section>
   );
 };

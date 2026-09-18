@@ -1,7 +1,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { ArrowLeft, Activity } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const specimens = [
@@ -34,13 +34,21 @@ const Laboratory = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     useMotionValueEvent(scrollYProgress, "change", (latest) => {
         const index = Math.min(
-            Math.floor(latest * specimens.length * 1.1), // 1.1 multiplier helps reach end
+            Math.floor(latest * specimens.length * 1.05),
             specimens.length - 1
         );
         setActiveIndex(index);
     });
 
     const activeSpecimen = specimens[activeIndex];
+
+    const scrollToSpecimen = (index: number) => {
+      const targetIndex = Math.max(0, Math.min(specimens.length - 1, index));
+      if (!targetRef.current) return;
+      const scrollHeight = targetRef.current.scrollHeight - window.innerHeight;
+      const targetY = (targetIndex / (specimens.length - 1)) * scrollHeight;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    };
 
     // Preload images
     useEffect(() => {
@@ -99,9 +107,29 @@ const Laboratory = () => {
                 </div>
             </div>
 
-            {/* Fixed Info Panel (Bottom Left) -- z-40 to sit above gallery */}
+            {/* Direct Navigation Controls */}
+            <div className="fixed bottom-8 right-8 z-40 flex items-center gap-3">
+              <button
+                onClick={() => scrollToSpecimen(activeIndex - 1)}
+                disabled={activeIndex === 0}
+                className="w-12 h-12 rounded-2xl bg-black/60 backdrop-blur-md border border-white/10 hover:border-cyan-400 disabled:opacity-30 disabled:hover:border-white/10 flex items-center justify-center text-white transition-all shadow-xl"
+                aria-label="Previous specimen"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={() => scrollToSpecimen(activeIndex + 1)}
+                disabled={activeIndex === specimens.length - 1}
+                className="w-12 h-12 rounded-2xl bg-black/60 backdrop-blur-md border border-white/10 hover:border-cyan-400 disabled:opacity-30 disabled:hover:border-white/10 flex items-center justify-center text-white transition-all shadow-xl"
+                aria-label="Next specimen"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+
+            {/* Fixed Info Panel (Bottom Left) */}
             <div className="fixed bottom-0 left-0 p-8 z-40 w-full md:w-96 hidden md:block pointer-events-none">
-                <div className="bg-black/40 backdrop-blur-xl border-l-2 border-cyan-500/50 p-6 rounded-r-2xl transform transition-all duration-500 hover:border-cyan-400">
+                <div className="bg-black/60 backdrop-blur-md border-l-2 border-cyan-500/50 p-6 rounded-r-2xl transform transition-all duration-500 hover:border-cyan-400 shadow-2xl">
                     <motion.div
                         key={activeIndex}
                         initial={{ opacity: 0, x: -20 }}
@@ -145,12 +173,12 @@ const Laboratory = () => {
             </div>
             
             {/* Mobile Scroll Hint */}
-            <div className="fixed bottom-8 right-8 z-40 md:hidden animate-bounce text-cyan-500">
+            <div className="fixed bottom-24 right-8 z-40 md:hidden animate-bounce text-cyan-500">
                 <Activity size={24} />
             </div>
 
-            {/* GHOST SCROLL SPACER - The only thing that actually scrolls */}
-            <div ref={targetRef} className="relative h-[600vh] w-full pointer-events-none" />
+            {/* GHOST SCROLL SPACER - Comfortable scrolling distance */}
+            <div ref={targetRef} className="relative h-[380vh] w-full pointer-events-none" />
         </div>
     );
 };
