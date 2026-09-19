@@ -15,7 +15,7 @@ const Layout: React.FC = () => {
       
       {/* Top scroll progress indicator bar */}
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 origin-left z-[100]"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-stone-400 via-amber-200 to-stone-300 origin-left z-[100]"
         style={{ scaleX: scrollYProgress }}
       />
 
@@ -32,17 +32,19 @@ const Layout: React.FC = () => {
         </div>
 
         <div 
-          className="flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-mono text-gray-400"
+          className="flex items-center gap-6 md:gap-8 text-[11px] uppercase tracking-[0.2em] font-mono text-gray-400"
           onMouseEnter={() => setCursorVariant('button')}
           onMouseLeave={() => setCursorVariant('default')}
         >
           {isHome ? (
             <>
-              <a href="#projects" className="hover:text-white transition-colors hover:shadow-[0_0_15px_rgba(0,242,255,0.3)]">Projects</a>
+              <a href="#tech-stack" className="hover:text-white transition-colors">Stack</a>
+              <a href="#projects" className="hover:text-white transition-colors">Systems</a>
               <Link to="/laboratory" className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
                 Laboratory
               </Link>
+              <a href="#contact" className="hover:text-white transition-colors hidden sm:inline">Contact</a>
             </>
           ) : (
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
@@ -50,7 +52,7 @@ const Layout: React.FC = () => {
         </div>
       </nav>
       
-      <main className="w-full pt-16">
+      <main className="w-full pt-0">
         <Outlet />
       </main>
     </div>

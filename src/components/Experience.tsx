@@ -3,10 +3,9 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Global target color references for cross-component WebGL color sync
 const globalColors = {
-  primary: new THREE.Color("#06b6d4"),
-  secondary: new THREE.Color("#c084fc"),
+  primary: new THREE.Color("#d4b896"),
+  secondary: new THREE.Color("#78716c"),
 };
 
 const AbstractShape = () => {

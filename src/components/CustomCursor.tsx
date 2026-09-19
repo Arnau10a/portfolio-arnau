@@ -62,17 +62,17 @@ const CustomCursor: React.FC = () => {
         dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       }
 
-      // Spawn subtle glowing sparkles if in Hero
-      if (window.scrollY < window.innerHeight * 0.85 && Math.random() < 0.45) {
-        const colors = ['#06b6d4', '#22d3ee', '#c084fc', '#a855f7'];
+      // Spawn subtle warm ambient sparks if in Hero
+      if (window.scrollY < window.innerHeight * 0.85 && Math.random() < 0.35) {
+        const colors = ['#f5efe6', '#d4b896', '#e7d7c1', '#a8a29e'];
         particles.push({
           x: mouseX + (Math.random() - 0.5) * 8,
           y: mouseY + (Math.random() - 0.5) * 8,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5 - 0.5,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: (Math.random() - 0.5) * 1.2 - 0.3,
           life: 1,
           maxLife: 20 + Math.random() * 15,
-          size: 1.5 + Math.random() * 2,
+          size: 1.2 + Math.random() * 1.8,
           color: colors[Math.floor(Math.random() * colors.length)],
         });
       }

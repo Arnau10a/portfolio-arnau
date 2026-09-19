@@ -1,208 +1,115 @@
-import React, { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useCursor } from '../context/CursorContext';
 import { ArrowDown } from 'lucide-react';
 
-interface MagneticLetterProps {
-  letter: string;
-  letterVariants: any;
-}
-
-const MagneticLetter: React.FC<MagneticLetterProps> = ({ letter, letterVariants }) => {
-  const spanRef = useRef<HTMLSpanElement>(null);
-  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    let mouseX = -1000;
-    let mouseY = -1000;
-    let animId: number;
-
-    const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    };
-
-    const updateMagnetism = () => {
-      if (spanRef.current && window.scrollY < window.innerHeight * 0.8) {
-        const rect = spanRef.current.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        const dx = mouseX - centerX;
-        const dy = mouseY - centerY;
-        const distance = Math.hypot(dx, dy);
-
-        // Attraction threshold radius
-        const magnetRadius = 150;
-        if (distance < magnetRadius && distance > 0) {
-          const power = Math.pow((magnetRadius - distance) / magnetRadius, 1.5);
-          // Magnetic pull force toward mouse cursor
-          const pullX = (dx / distance) * power * 38;
-          const pullY = (dy / distance) * power * 38;
-
-          setOffset((prev) => ({
-            x: prev.x + (pullX - prev.x) * 0.22,
-            y: prev.y + (pullY - prev.y) * 0.22,
-          }));
-        } else {
-          // Elastic recovery to rest position
-          setOffset((prev) => {
-            if (Math.abs(prev.x) < 0.05 && Math.abs(prev.y) < 0.05) return { x: 0, y: 0 };
-            return {
-              x: prev.x * 0.82,
-              y: prev.y * 0.82,
-            };
-          });
-        }
-      } else {
-        setOffset({ x: 0, y: 0 });
-      }
-
-      animId = requestAnimationFrame(updateMagnetism);
-    };
-
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
-    animId = requestAnimationFrame(updateMagnetism);
-
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      cancelAnimationFrame(animId);
-    };
-  }, []);
-
-  return (
-    <motion.span
-      ref={spanRef}
-      variants={letterVariants}
-      className="inline-block origin-bottom transform-gpu will-change-transform"
-      style={{
-        transform: `translate3d(${offset.x}px, ${offset.y}px, 0)`,
-        transition: 'transform 0.04s ease-out',
-      }}
-    >
-      {letter}
-    </motion.span>
-  );
-};
-
 const Hero: React.FC = () => {
   const { setCursorVariant } = useCursor();
+  const heroRef = useRef<HTMLElement>(null);
 
-  const name = "ARNAU GARCIA";
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const letterVariants = {
-    hidden: { opacity: 0, y: 80, rotateX: 45 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      transition: {
-        type: "spring" as const,
-        damping: 15,
-        stiffness: 100,
-      },
-    },
-  };
+  const titleScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   return (
-    <section className="relative h-screen w-full flex flex-col justify-center items-center overflow-hidden px-6">
-      {/* Subtle Ambient Vignette */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 blur-[180px] rounded-full pointer-events-none" />
+    <section 
+      ref={heroRef}
+      className="relative h-screen h-[100dvh] w-full flex flex-col justify-between items-center px-6 md:px-12 pt-20 sm:pt-24 pb-6 md:pb-8 overflow-hidden select-none"
+    >
+      {/* Subtle organic light accent */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] max-w-[800px] h-[350px] bg-gradient-to-r from-amber-200/10 via-white/5 to-orange-200/10 blur-[140px] rounded-full pointer-events-none" />
 
-      {/* Editorial Top Status */}
-      <div className="absolute top-28 left-6 md:left-12 font-mono text-[11px] text-gray-500 tracking-[0.2em] uppercase hidden md:flex items-center gap-3 pointer-events-none">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-        <span>BARCELONA, ES / OPEN TO SELECTIVE ROLES</span>
-      </div>
-      
-      <div className="absolute top-28 right-6 md:right-12 font-mono text-[11px] text-gray-500 tracking-[0.2em] uppercase hidden md:flex items-center gap-2 pointer-events-none">
-        <span>SOFTWARE & XR SYSTEMS</span>
-      </div>
+      {/* Top minimal status */}
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full flex items-center justify-between text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-neutral-400 font-mono z-10 shrink-0"
+      >
+        <span>BARCELONA, ES</span>
+        <span className="text-neutral-500 hidden sm:inline">//</span>
+        <span>SOFTWARE & AI SYSTEMS</span>
+      </motion.div>
 
-      {/* Hero Body Content */}
-      <div className="z-10 text-center w-full max-w-6xl">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
+      {/* Hero Core: Big AAA Typography */}
+      <motion.div 
+        style={{ scale: titleScale, opacity: titleOpacity, y: titleY }}
+        className="my-auto text-center w-full z-10 flex flex-col items-center justify-center"
+      >
+        {/* Name in HUGE cinematic luxury scale */}
+        <div 
           onMouseEnter={() => setCursorVariant('text')}
           onMouseLeave={() => setCursorVariant('default')}
-          className="perspective-[1000px] inline-block select-none"
+          className="overflow-hidden py-1 sm:py-2"
         >
-          <h1 
-            className="font-black tracking-tight leading-[0.8] text-white flex flex-wrap justify-center gap-x-6 sm:gap-x-10 cursor-default"
+          <motion.h1
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ 
+              duration: 1.2, 
+              ease: [0.16, 1, 0.3, 1],
+              delay: 0.1
+            }}
+            className="font-black tracking-[-0.04em] leading-[0.85] text-white"
             style={{ 
-              fontSize: 'clamp(3.5rem, 11vw, 9rem)', 
-              fontFamily: 'var(--font-syne)',
+              fontSize: 'clamp(3.5rem, 13.5vw, 11rem)',
+              fontFamily: 'var(--font-syne)'
             }}
           >
-            {name.split(" ").map((word, wordIndex) => (
-              <span key={wordIndex} className="inline-flex overflow-visible py-3">
-                {word.split("").map((letter, letterIndex) => (
-                  <MagneticLetter
-                    key={letterIndex}
-                    letter={letter}
-                    letterVariants={letterVariants}
-                  />
-                ))}
-              </span>
-            ))}
-          </h1>
-        </motion.div>
-        
+            ARNAU GARCIA
+          </motion.h1>
+        </div>
+
+        {/* Philosophical Statement on Artificial Intelligence */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="flex flex-col items-center gap-5 mt-8"
+          transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-2xl mx-auto mt-4 sm:mt-6 px-4"
         >
-          <p className="text-xs md:text-sm text-gray-300 uppercase tracking-[0.4em] font-mono font-medium">
-            Creative Technologist & Software Systems Engineer
+          <p className="text-sm sm:text-lg md:text-xl text-neutral-300 font-light italic tracking-tight leading-snug">
+            “Intelligence is not about imitating human thought, but giving matter the ability to reason.”
           </p>
-          
-          <div className="flex gap-8 text-[10px] uppercase tracking-[0.25em] text-gray-400 font-mono">
-            <span className="text-gray-300">Spatial Computing</span>
-            <span className="text-gray-600">/</span>
-            <span className="text-gray-300">Robotics Vision</span>
-            <span className="text-gray-600">/</span>
-            <span className="text-gray-300">Reinforcement Learning</span>
-          </div>
+          <span className="block mt-2.5 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-neutral-500 font-mono">
+            Software Engineer · Autonomous Systems & Real-Time Computing
+          </span>
         </motion.div>
-      </div>
+      </motion.div>
 
-      {/* Scroll Down Indicator */}
+      {/* Bottom Minimal Essential Controls */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.8 }}
-        className="absolute bottom-10 flex flex-col items-center gap-2 cursor-pointer"
-        onMouseEnter={() => setCursorVariant('button')}
-        onMouseLeave={() => setCursorVariant('default')}
-        onClick={() => {
-          document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-        }}
+        transition={{ duration: 0.8, delay: 0.8 }}
+        className="w-full flex items-center justify-between text-xs font-mono z-10 pt-3 border-t border-white/[0.06] shrink-0"
       >
-        <span className="text-[10px] uppercase tracking-[0.25em] text-gray-400 font-mono font-medium">
-          Case Studies
-        </span>
-        <motion.div
-          animate={{ y: [0, 4, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="w-7 h-7 rounded-full border border-white/10 flex items-center justify-center bg-white/[0.02] hover:border-white/40 transition-colors"
+        <div className="flex items-center gap-3">
+          <a
+            href="mailto:parise.garcia@gmail.com"
+            onMouseEnter={() => setCursorVariant('button')}
+            onMouseLeave={() => setCursorVariant('default')}
+            className="text-neutral-400 hover:text-white transition-colors tracking-widest uppercase text-[10px] sm:text-[11px]"
+          >
+            parise.garcia@gmail.com
+          </a>
+        </div>
+
+        <button
+          onClick={() => {
+            document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onMouseEnter={() => setCursorVariant('button')}
+          onMouseLeave={() => setCursorVariant('default')}
+          className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors uppercase tracking-widest text-[10px] sm:text-[11px] group"
         >
-          <ArrowDown size={11} className="text-gray-400" />
-        </motion.div>
+          <span>Selected Work</span>
+          <ArrowDown size={12} className="group-hover:translate-y-0.5 transition-transform" />
+        </button>
       </motion.div>
     </section>
   );

@@ -22,13 +22,21 @@ const Loader: React.FC<LoaderProps> = ({ onFinished }) => {
         }
         // Rapid and smooth catch-up to the real target
         const diff = target - prev;
-        const step = Math.max(4, Math.ceil(diff * 0.35));
+        const step = Math.max(5, Math.ceil(diff * 0.4));
         const next = prev + step;
         return next >= 100 ? 100 : next;
       });
     }, 20);
 
-    return () => clearInterval(interval);
+    // Fallback safety timeout: ensure loader finishes even if 3D scene has no assets to report
+    const safetyTimeout = setTimeout(() => {
+      setDisplayProgress(100);
+    }, 800);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(safetyTimeout);
+    };
   }, [active, progress]);
 
   useEffect(() => {
