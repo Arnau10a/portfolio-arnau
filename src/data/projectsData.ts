@@ -30,7 +30,7 @@ export const projectsData: EngineeringProject[] = [
     title: "Biofeedback VR Core",
     subtitle: "Real-Time Bluetooth Low Energy (BLE) Physiological Telemetry for Android / Quest XR",
     field: "XR Biosensing & Wearable Systems",
-    year: "2024",
+    year: "2026",
     accent: "#06b6d4",
     githubUrl: "https://github.com/Arnau10a/unity-biofeedback-vr-core",
     packageUrl: "https://github.com/Arnau10a/unity-biofeedback-vr-core.git",
@@ -94,7 +94,7 @@ public class BiofeedbackController : MonoBehaviour
     title: "NuclearVerse VR",
     subtitle: "Tokamak Fusion Reactor Digital Twin & Microsecond RAG Architecture",
     field: "Distributed AI & Spatial Computing",
-    year: "2024",
+    year: "2026",
     accent: "#38bdf8",
     architecture: {
       overview: "High-fidelity holographic digital twin engineered for ITER/DEMO fusion reactors. Enables human operators to rehearse mission-critical robotic component assembly inside high-radiation plasma chambers before hardware actuation.",
