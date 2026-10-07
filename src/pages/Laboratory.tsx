@@ -106,7 +106,7 @@ const InfiniteGrid = () => {
 };
 
 // 3D Sci-Fi Drone Vehicle with tilt physics, dual thrusters, and spinning plasma rings
-const RoverVehicle = ({ onCollide, onCollect }: { onCollide: () => void; onCollect: () => void }) => {
+const RoverVehicle = () => {
   const roverGroup = useRef<THREE.Group>(null);
   const leftRotor = useRef<THREE.Mesh>(null);
   const rightRotor = useRef<THREE.Mesh>(null);
@@ -177,8 +177,8 @@ const RoverVehicle = ({ onCollide, onCollect }: { onCollide: () => void; onColle
           <meshStandardMaterial color="#292524" metalness={0.8} />
         </mesh>
         {/* Left Nacelle Engine */}
-        <mesh position={[-0.45, 0, 0]}>
-          <cylinderGeometry args={[0.22, 0.25, 0.8, 8]} rotation={[Math.PI / 2, 0, 0]} />
+        <mesh position={[-0.45, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.22, 0.25, 0.8, 8]} />
           <meshStandardMaterial color="#0c0a09" roughness={0.4} metalness={0.9} />
         </mesh>
         {/* Left Plasma Rotor Ring */}
@@ -198,8 +198,8 @@ const RoverVehicle = ({ onCollide, onCollect }: { onCollide: () => void; onColle
           <meshStandardMaterial color="#292524" metalness={0.8} />
         </mesh>
         {/* Right Nacelle Engine */}
-        <mesh position={[0.45, 0, 0]}>
-          <cylinderGeometry args={[0.22, 0.25, 0.8, 8]} rotation={[Math.PI / 2, 0, 0]} />
+        <mesh position={[0.45, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.22, 0.25, 0.8, 8]} />
           <meshStandardMaterial color="#0c0a09" roughness={0.4} metalness={0.9} />
         </mesh>
         {/* Right Plasma Rotor Ring */}
@@ -212,8 +212,8 @@ const RoverVehicle = ({ onCollide, onCollect }: { onCollide: () => void; onColle
       </group>
 
       {/* Rear Ion Exhaust Core */}
-      <mesh position={[0, 0.1, 0.85]}>
-        <cylinderGeometry args={[0.18, 0.22, 0.3, 8]} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh position={[0, 0.1, 0.85]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.18, 0.22, 0.3, 8]} />
         <meshBasicMaterial color="#f59e0b" />
       </mesh>
       <pointLight position={[0, 0.1, 1.1]} intensity={2} color="#f59e0b" distance={4} />
@@ -225,7 +225,6 @@ const RoverVehicle = ({ onCollide, onCollect }: { onCollide: () => void; onColle
 const WorldElements = ({ onHitObstacle, onHitNode }: { onHitObstacle: () => void; onHitNode: () => void }) => {
   const [obstacles, setObstacles] = useState<ObstacleData[]>([]);
   const [nodes, setNodes] = useState<CollectibleData[]>([]);
-  const nextSpawnZ = useRef(-30);
 
   // Initialize track objects
   useEffect(() => {
@@ -471,7 +470,7 @@ const Laboratory: React.FC = () => {
           
           <Stars radius={120} depth={60} count={900} factor={3} saturation={0} fade />
           <InfiniteGrid />
-          <RoverVehicle onCollide={handleGameOver} onCollect={handleCollectNode} />
+          <RoverVehicle />
           <WorldElements onHitObstacle={handleGameOver} onHitNode={handleCollectNode} />
         </Canvas>
       </div>

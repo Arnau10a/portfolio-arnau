@@ -72,18 +72,39 @@ const PhysicsCard: React.FC<{ project: EngineeringProject; index: number }> = ({
             </span>
           </div>
 
-          {/* Minimal cinematic image preview */}
-          <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-6 bg-neutral-900 border border-white/10">
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover object-center filter brightness-90 group-hover:brightness-105 group-hover:scale-105 transition-all duration-700 ease-out"
+          {/* Minimal technical telemetry preview instead of AI image */}
+          <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-6 bg-gradient-to-br from-neutral-900 to-black border border-white/10 p-4 flex flex-col justify-between">
+            <div 
+              className="absolute inset-0 opacity-20 pointer-events-none"
+              style={{
+                backgroundImage: `radial-gradient(circle at top right, ${project.accent}33 0%, transparent 60%), linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)`,
+                backgroundSize: '100% 100%, 16px 16px, 16px 16px'
+              }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
-            
+
+            <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-neutral-400">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: project.accent }} />
+                <span className="text-white font-medium">{project.id.toUpperCase()}</span>
+              </span>
+              <span className="px-2 py-0.5 rounded border border-white/10 bg-white/[0.02]">
+                {project.year}
+              </span>
+            </div>
+
+            <div className="relative z-10 my-auto text-center py-2">
+              <div className="text-xl sm:text-2xl font-mono font-bold text-white tracking-tight">
+                {project.metrics[0].value}
+              </div>
+              <div className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 mt-0.5">
+                {project.metrics[0].label} · {project.metrics[0].detail}
+              </div>
+            </div>
+
             {/* Quick metric tag over image */}
-            <div className="absolute bottom-3 left-3 text-[11px] font-mono text-neutral-300 bg-black/60 backdrop-blur-md px-3 py-1 rounded-md border border-white/10">
-              <span className="text-white font-semibold">{project.metrics[0].label}:</span> {project.metrics[0].value}
+            <div className="relative z-10 flex items-center justify-between text-[11px] font-mono text-neutral-300 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/10">
+              <span className="text-neutral-400">STACK:</span>
+              <span className="text-white font-medium">{project.stack.slice(0, 2).join(' · ')}</span>
             </div>
           </div>
 

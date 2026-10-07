@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Github, ExternalLink, Cpu, Terminal, Layers, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, Cpu, Terminal, Layers, CheckCircle2, Copy, Check, Code2, Package } from 'lucide-react';
 import { projectsData } from '../data/projectsData';
 import { useCursor } from '../context/CursorContext';
 
@@ -9,6 +9,14 @@ const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { setCursorVariant } = useCursor();
+  const [activeTab, setActiveTab] = useState<number>(0);
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const project = projectsData.find((p) => p.id === id);
 
@@ -106,19 +114,59 @@ const ProjectDetail: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Hero Media Preview */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="my-12 rounded-2xl overflow-hidden border border-white/10 bg-neutral-900 shadow-2xl relative"
-        >
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full aspect-[16/9] object-cover object-center"
-          />
-        </motion.div>
+        {/* Technical Architecture & Code Showcase (No AI image) */}
+        {project.codeSnippets && project.codeSnippets.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="my-12 rounded-2xl overflow-hidden border border-white/10 bg-[#09090b] shadow-2xl"
+          >
+            <div className="flex flex-wrap items-center justify-between px-4 py-3 border-b border-white/[0.08] bg-white/[0.02]">
+              <div className="flex items-center gap-2">
+                <Code2 size={14} className="text-neutral-400" />
+                <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 mr-2">Core Source Code:</span>
+                {project.codeSnippets.map((snippet, idx) => (
+                  <button
+                    key={snippet.label}
+                    onClick={() => setActiveTab(idx)}
+                    className={`px-3 py-1 rounded text-xs font-mono transition-colors ${
+                      activeTab === idx
+                        ? 'bg-white/10 text-white font-medium border border-white/10'
+                        : 'text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    {snippet.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3">
+                {project.packageUrl && (
+                  <button
+                    onClick={() => copyToClipboard(project.packageUrl!)}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded border border-cyan-500/30 bg-cyan-950/20 text-cyan-300 font-mono text-xs hover:bg-cyan-950/40 transition-all"
+                  >
+                    <Package size={12} />
+                    <span>UPM Git URL</span>
+                  </button>
+                )}
+
+                <button
+                  onClick={() => copyToClipboard(project.codeSnippets![activeTab].code)}
+                  className="flex items-center gap-1.5 px-3 py-1 rounded border border-white/10 text-neutral-300 font-mono text-xs hover:text-white transition-colors"
+                >
+                  {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                  <span>{copied ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
+            </div>
+
+            <pre className="p-6 text-xs sm:text-sm font-mono text-neutral-300 overflow-x-auto leading-relaxed max-h-96 scrollbar-thin bg-black/60">
+              <code>{project.codeSnippets[activeTab].code}</code>
+            </pre>
+          </motion.div>
+        )}
 
         {/* Quantitative Metrics Matrix */}
         <motion.div

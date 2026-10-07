@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Linkedin, Github, ArrowUpRight, Copy, Check, FileText } from 'lucide-react';
+import { Mail, Linkedin, Github, ArrowUpRight, Copy, Check } from 'lucide-react';
 import { useCursor } from '../context/CursorContext';
 
 const Footer: React.FC = () => {
