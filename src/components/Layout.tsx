@@ -11,42 +11,39 @@ const Layout: React.FC = () => {
   const isHome = location.pathname === '/';
 
   return (
-    <div className="min-h-screen w-full text-slate-100 relative bg-[#050505]">
-      {/* Top scroll progress indicator bar */}
+    <div className="min-h-screen w-full text-neutral-200 relative bg-black">
+      {/* Top subtle scroll progress bar */}
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-[2px] bg-[#e5a93c] origin-left z-[100]"
+        className="fixed top-0 left-0 right-0 h-[1.5px] bg-white origin-left z-[100]"
         style={{ scaleX: scrollYProgress }}
       />
 
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 md:px-14 py-4 flex justify-between items-center bg-[#050505]/85 backdrop-blur-md border-b border-white/[0.08]">
-        <div 
-          className="flex items-center gap-3"
+      <nav className="fixed top-0 left-0 w-full z-50 px-6 sm:px-12 md:px-20 py-5 flex justify-between items-center bg-black/70 backdrop-blur-md border-b border-neutral-900">
+        <Link 
+          to="/" 
+          className="text-sm font-semibold tracking-tight text-white hover:text-neutral-300 transition-colors"
           onMouseEnter={() => setCursorVariant('button')}
           onMouseLeave={() => setCursorVariant('default')}
         >
-          <Link to="/" className="text-base font-bold tracking-tight text-white flex items-center gap-2">
-            <span className="px-2 py-0.5 bg-[#e5a93c]/10 border border-[#e5a93c]/30 text-[#e5a93c] text-[11px] font-mono tracking-widest uppercase rounded-[2px]">AG</span>
-            <span className="text-xs uppercase tracking-[0.25em] text-slate-400 font-mono hidden sm:inline">Arnau Garcia</span>
-          </Link>
-        </div>
+          Arnau Garcia
+        </Link>
 
         <div 
-          className="flex items-center gap-5 sm:gap-7 text-[11px] uppercase tracking-[0.2em] font-mono text-slate-400"
+          className="flex items-center gap-6 sm:gap-8 text-xs text-neutral-400 font-mono"
           onMouseEnter={() => setCursorVariant('button')}
           onMouseLeave={() => setCursorVariant('default')}
         >
           {isHome ? (
             <>
+              <a href="#projects" className="hover:text-white transition-colors">Work</a>
               <a href="#tech-stack" className="hover:text-white transition-colors">Stack</a>
-              <a href="#projects" className="hover:text-white transition-colors">Sistemas</a>
-              <Link to="/laboratory" className="text-[#e5a93c] hover:text-amber-200 transition-colors flex items-center gap-1.5 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#e5a93c] animate-pulse" />
-                Laboratorio
+              <Link to="/laboratory" className="text-neutral-300 hover:text-white transition-colors">
+                Lab
               </Link>
-              <a href="#contact" className="hover:text-white transition-colors hidden sm:inline">Contacto</a>
+              <a href="#contact" className="hover:text-white transition-colors">Contact</a>
             </>
           ) : (
-            <Link to="/" className="hover:text-white transition-colors">← Inicio</Link>
+            <Link to="/" className="hover:text-white transition-colors">← Overview</Link>
           )}
         </div>
       </nav>

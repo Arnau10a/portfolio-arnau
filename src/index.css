@@ -1,18 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "Space Grotesk", monospace;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
   --font-syne: "Syne", sans-serif;
-  
-  --color-obsidian: #050505;
-  --color-surface: #0a0d12;
-  --color-surface-hover: #12161f;
-  --color-amber-lab: #e5a93c;
-  --color-phosphor: #06d6a0;
-  --color-steel: #94a3b8;
-  --color-border-tech: rgba(255, 255, 255, 0.12);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -23,12 +15,12 @@
 
 :root {
   font-family: var(--font-sans);
-  line-height: 1.5;
+  line-height: 1.6;
   font-weight: 400;
 
   color-scheme: dark;
-  color: #f1f5f9;
-  background-color: #050505;
+  color: #ededed;
+  background-color: #000000;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -42,11 +34,8 @@ body {
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
-  background-color: #050505;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 48px 48px;
+  background-color: #000000;
+  color: #ededed;
 }
 
 #root {
@@ -54,88 +43,53 @@ body {
   min-height: 100vh;
 }
 
-/* Angular technical button */
-.btn-tech {
+/* Linear / Apple button */
+.btn-linear {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.55rem 1.15rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #e2e8f0;
-  background: #0a0d12;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 2px;
-  position: relative;
+  color: #ffffff;
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-tech:hover {
-  background: #141922;
-  border-color: #e5a93c;
-  color: #ffffff;
-  transform: translate(-1px, -1px);
-  box-shadow: 2px 2px 0px 0px #e5a93c;
+.btn-linear:hover {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
 }
 
-.btn-tech:active {
-  transform: translate(1px, 1px);
-  box-shadow: 0px 0px 0px 0px #e5a93c;
+.btn-linear:active {
+  transform: translateY(0);
 }
 
-/* Technical Card Shell */
-.card-tech {
-  background: #080a0f;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  position: relative;
-  transition: border-color 0.25s ease, transform 0.25s ease;
-}
-
-.card-tech:hover {
-  border-color: rgba(229, 169, 60, 0.45);
-}
-
-.card-tech::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 6px;
-  height: 6px;
-  border-top: 2px solid #e5a93c;
-  border-left: 2px solid #e5a93c;
-  pointer-events: none;
-  opacity: 0.7;
-}
-
-.card-tech::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  right: -1px;
-  width: 6px;
-  height: 6px;
-  border-bottom: 2px solid #e5a93c;
-  border-right: 2px solid #e5a93c;
-  pointer-events: none;
-  opacity: 0.7;
-}
-
-/* Technical wireframe tag */
-.tag-tech {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  padding: 0.2rem 0.55rem;
-  border-radius: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Linear subtle card */
+.card-linear {
   background: rgba(255, 255, 255, 0.02);
-  color: #94a3b8;
-  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-linear:hover {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Minimal pill tag */
+.tag-pill {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #a1a1aa;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Hide scrollbar globally */
