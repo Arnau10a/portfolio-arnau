@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useCursor } from '../context/CursorContext';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Terminal } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const { setCursorVariant } = useCursor();
@@ -12,52 +12,44 @@ const Hero: React.FC = () => {
     offset: ["start start", "end start"]
   });
 
-  const titleScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const titleScale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, 70]);
 
   return (
     <section 
       ref={heroRef}
-      className="relative h-screen h-[100dvh] w-full flex flex-col justify-between items-center px-6 md:px-12 pt-20 sm:pt-24 pb-6 md:pb-8 overflow-hidden select-none"
+      className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between items-center px-6 md:px-14 pt-28 pb-10 select-none overflow-hidden"
     >
-      {/* Subtle organic light accent */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] max-w-[800px] h-[350px] bg-gradient-to-r from-amber-200/10 via-white/5 to-orange-200/10 blur-[140px] rounded-full pointer-events-none" />
+      <div className="w-full max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between text-[11px] font-mono tracking-widest text-slate-400 border-b border-white/[0.08] pb-4 z-10 gap-2">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-slate-200">SYS_STATUS: ACTIVE</span>
+          <span className="text-slate-600">//</span>
+          <span className="text-slate-400">BARCELONA, ES</span>
+        </div>
+        <div className="flex items-center gap-3 text-slate-400">
+          <Terminal size={12} className="text-[#e5a93c]" />
+          <span>SPEC: C++ · UNITY XR · PYTORCH · ROS</span>
+        </div>
+      </div>
 
-      {/* Top minimal status */}
-      <motion.div 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full flex items-center justify-between text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-neutral-400 font-mono z-10 shrink-0"
-      >
-        <span>BARCELONA, ES</span>
-        <span className="text-neutral-500 hidden sm:inline">//</span>
-        <span>SOFTWARE & AI SYSTEMS</span>
-      </motion.div>
-
-      {/* Hero Core: Big AAA Typography */}
       <motion.div 
         style={{ scale: titleScale, opacity: titleOpacity, y: titleY }}
-        className="my-auto text-center w-full z-10 flex flex-col items-center justify-center"
+        className="my-auto text-left sm:text-center w-full max-w-6xl z-10 flex flex-col items-start sm:items-center justify-center py-8"
       >
-        {/* Name in HUGE cinematic luxury scale */}
         <div 
           onMouseEnter={() => setCursorVariant('text')}
           onMouseLeave={() => setCursorVariant('default')}
-          className="overflow-hidden py-1 sm:py-2"
+          className="w-full"
         >
           <motion.h1
-            initial={{ y: "100%", opacity: 0 }}
+            initial={{ y: 25, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ 
-              duration: 1.2, 
-              ease: [0.16, 1, 0.3, 1],
-              delay: 0.1
-            }}
-            className="font-black tracking-[-0.04em] leading-[0.85] text-white"
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="font-black tracking-[-0.035em] leading-[0.88] text-white"
             style={{ 
-              fontSize: 'clamp(3.5rem, 13.5vw, 11rem)',
+              fontSize: 'clamp(3.2rem, 12.5vw, 10.5rem)',
               fontFamily: 'var(--font-syne)'
             }}
           >
@@ -65,52 +57,57 @@ const Hero: React.FC = () => {
           </motion.h1>
         </div>
 
-        {/* Philosophical Statement on Artificial Intelligence */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-2xl mx-auto mt-4 sm:mt-6 px-4"
+          transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-6 sm:mt-8 max-w-2xl text-left sm:text-center space-y-3"
         >
-          <p className="text-sm sm:text-lg md:text-xl text-neutral-300 font-light italic tracking-tight leading-snug">
-            “Intelligence is not about imitating human thought, but giving matter the ability to reason.”
+          <div className="inline-block text-[11px] font-mono tracking-[0.25em] text-[#e5a93c] uppercase font-semibold">
+            Software & XR Systems Engineer
+          </div>
+          <p className="text-sm sm:text-base text-slate-300 font-sans font-light leading-relaxed">
+            Construyo motores de simulación háptica, pipelines de percepción robótica en C++ y arquitecturas de telemetría biométrica en tiempo real para cascos de Realidad Extendida.
           </p>
-          <span className="block mt-2.5 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-neutral-500 font-mono">
-            Software Engineer · Autonomous Systems & Real-Time Computing
-          </span>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex flex-wrap items-center gap-3 sm:gap-4 mt-8"
+        >
+          <a
+            href="#projects"
+            className="btn-tech"
+            onMouseEnter={() => setCursorVariant('button')}
+            onMouseLeave={() => setCursorVariant('default')}
+          >
+            <span>Explorar Sistemas</span>
+            <span className="text-[#e5a93c]">↓</span>
+          </a>
+          <a
+            href="#contact"
+            className="btn-tech !bg-transparent border-white/20 hover:border-slate-300"
+            onMouseEnter={() => setCursorVariant('button')}
+            onMouseLeave={() => setCursorVariant('default')}
+          >
+            <span>Contacto Técnico</span>
+          </a>
         </motion.div>
       </motion.div>
 
-      {/* Bottom Minimal Essential Controls */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-        className="w-full flex items-center justify-between text-xs font-mono z-10 pt-3 border-t border-white/[0.06] shrink-0"
-      >
-        <div className="flex items-center gap-3">
-          <a
-            href="mailto:parise.garcia@gmail.com"
-            onMouseEnter={() => setCursorVariant('button')}
-            onMouseLeave={() => setCursorVariant('default')}
-            className="text-neutral-400 hover:text-white transition-colors tracking-widest uppercase text-[10px] sm:text-[11px]"
-          >
-            parise.garcia@gmail.com
-          </a>
-        </div>
-
-        <button
-          onClick={() => {
-            document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-          onMouseEnter={() => setCursorVariant('button')}
-          onMouseLeave={() => setCursorVariant('default')}
-          className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors uppercase tracking-widest text-[10px] sm:text-[11px] group"
+      <div className="w-full max-w-7xl mx-auto flex items-center justify-between text-[10px] font-mono tracking-widest text-slate-500 pt-4 border-t border-white/[0.06] z-10">
+        <span>LOC: 41.3879° N, 2.1699° E</span>
+        <a 
+          href="#projects" 
+          aria-label="Scroll down to projects"
+          className="flex items-center gap-1.5 hover:text-slate-200 transition-colors"
         >
-          <span>Selected Work</span>
-          <ArrowDown size={12} className="group-hover:translate-y-0.5 transition-transform" />
-        </button>
-      </motion.div>
+          <span>SCROLL MATRIX</span>
+          <ArrowDown size={11} className="animate-bounce" />
+        </a>
+      </div>
     </section>
   );
 };

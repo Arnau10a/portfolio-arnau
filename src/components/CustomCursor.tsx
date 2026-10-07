@@ -185,14 +185,14 @@ const CustomCursor: React.FC = () => {
         ref={dotRef}
         className={`fixed top-0 left-0 rounded-full pointer-events-none z-[9999] will-change-transform transition-[width,height,background-color] duration-150 ${
           isProject
-            ? 'w-3 h-3 bg-purple-400'
+            ? 'w-3 h-3 bg-[#e5a93c]'
             : isText
-            ? 'w-5 h-5 bg-cyan-400/40 blur-[0.5px]'
+            ? 'w-4 h-4 bg-[#e5a93c]/30 blur-[0.5px]'
             : isButton
-            ? 'w-2.5 h-2.5 bg-cyan-300'
+            ? 'w-2 h-2 bg-[#e5a93c]'
             : inHero
-            ? 'w-2.5 h-2.5 bg-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.8)]'
-            : 'w-2 h-2 bg-cyan-400'
+            ? 'w-2 h-2 bg-[#e5a93c] shadow-[0_0_8px_rgba(229,169,60,0.8)]'
+            : 'w-2 h-2 bg-[#e5a93c]'
         }`}
         style={{ transform: 'translate3d(-100px, -100px, 0) translate(-50%, -50%)' }}
       />
@@ -202,20 +202,20 @@ const CustomCursor: React.FC = () => {
         ref={ringRef}
         className={`fixed top-0 left-0 rounded-full pointer-events-none z-[9998] border will-change-transform flex items-center justify-center transition-[width,height,border-color,background-color] duration-200 ${
           isProject
-            ? 'w-16 h-16 border-purple-400 bg-purple-500/10'
+            ? 'w-14 h-14 border-[#e5a93c] bg-[#e5a93c]/5'
             : isButton
-            ? 'w-12 h-12 border-purple-400 bg-purple-500/5'
+            ? 'w-10 h-10 border-[#e5a93c]/80 bg-[#e5a93c]/5'
             : isText
-            ? 'w-10 h-10 border-cyan-400/30'
+            ? 'w-8 h-8 border-[#e5a93c]/30'
             : inHero
-            ? 'w-8 h-8 border-cyan-400/60 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
-            : 'w-6 h-6 border-cyan-400/50'
+            ? 'w-7 h-7 border-[#e5a93c]/50 shadow-[0_0_12px_rgba(229,169,60,0.15)]'
+            : 'w-5 h-5 border-[#e5a93c]/40'
         }`}
         style={{ transform: 'translate3d(-100px, -100px, 0) translate(-50%, -50%)' }}
       >
         {isProject && (
-          <span className="text-[7px] tracking-widest font-black uppercase font-mono text-purple-300">
-            VIEW
+          <span className="text-[7px] tracking-widest font-bold uppercase font-mono text-[#e5a93c]">
+            SPECS
           </span>
         )}
       </div>
