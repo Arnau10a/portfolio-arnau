@@ -24,10 +24,17 @@ const ProjectCard: React.FC<{ project: EngineeringProject }> = ({ project }) => 
       onMouseLeave={() => setCursorVariant('default')}
     >
       <div>
-        <div className="flex items-center justify-between pb-6 text-xs text-neutral-500 font-mono">
+        <div className="flex items-center justify-between pb-3 text-xs text-neutral-500 font-mono">
           <span>{project.num} · {project.year}</span>
           <span className="text-neutral-400">{project.field}</span>
         </div>
+
+        {project.context && (
+          <div className="text-xs font-mono text-neutral-400 mb-3 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span>{project.context}</span>
+          </div>
+        )}
 
         <h3 
           className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3 group-hover:text-neutral-200 transition-colors"
@@ -36,18 +43,18 @@ const ProjectCard: React.FC<{ project: EngineeringProject }> = ({ project }) => 
           {project.title}
         </h3>
 
-        <p className="text-sm text-neutral-400 font-light leading-relaxed mb-8">
+        <p className="text-sm text-neutral-400 font-light leading-relaxed mb-6">
           {project.subtitle}
         </p>
 
         {/* Highlighted metrics */}
-        <div className="grid grid-cols-3 gap-3 py-4 my-2 border-y border-neutral-900">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3.5 my-2 border-y border-neutral-900">
           {project.metrics.map((m, idx) => (
             <div key={idx} className="space-y-0.5">
-              <div className="text-[10px] font-mono uppercase text-neutral-500 tracking-wider">
+              <div className="text-[10px] font-mono uppercase text-neutral-500 tracking-wider truncate">
                 {m.label}
               </div>
-              <div className="text-sm sm:text-base font-semibold text-neutral-200 font-mono">
+              <div className="text-xs sm:text-sm font-semibold text-neutral-200 font-mono">
                 {m.value}
               </div>
             </div>
@@ -57,7 +64,7 @@ const ProjectCard: React.FC<{ project: EngineeringProject }> = ({ project }) => 
 
       <div className="pt-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap gap-1.5">
-          {project.stack.slice(0, 3).map((st) => (
+          {project.stack.map((st) => (
             <span key={st} className="tag-pill text-[11px]">
               {st}
             </span>
@@ -116,7 +123,7 @@ const BentoGrid: React.FC = () => {
           </h2>
         </div>
         <p className="text-sm text-neutral-400 font-light max-w-md">
-          Production packages, hardware sensor telemetry, and reinforcement learning environments.
+          Industrial simulations, low-latency telemetry streaming, autonomous robotics kinematics, and embedded AI search engines.
         </p>
       </div>
 

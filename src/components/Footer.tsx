@@ -3,7 +3,6 @@ import { Mail, Linkedin, Github, ArrowUpRight, Copy, Check } from 'lucide-react'
 import { useCursor } from '../context/CursorContext';
 
 const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
   const { setCursorVariant } = useCursor();
   const [copied, setCopied] = useState(false);
 
@@ -26,10 +25,10 @@ const Footer: React.FC = () => {
             className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight"
             style={{ fontFamily: 'var(--font-syne)' }}
           >
-            Let's build together.
+            Interested in collaborating or discussing real-time systems?
           </h2>
           <p className="text-base text-neutral-400 font-light leading-relaxed">
-            Open to software engineering roles in real-time systems, spatial computing, robotics, and reinforcement learning.
+            Open to software engineering roles in real-time engine systems, high-performance C++, robotics, and local embedded AI pipelines.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-4">
@@ -79,7 +78,7 @@ const Footer: React.FC = () => {
           </a>
 
           <a
-            href="https://linkedin.com/in/arnau-garcia"
+            href="https://linkedin.com/in/arnau-garcia-parise"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transition-colors flex items-center gap-1"
@@ -94,7 +93,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 font-mono">
-        <span>&copy; {currentYear} Arnau Garcia</span>
+        <span>&copy; 2026 Arnau Garcia Parise</span>
         <span>Barcelona, Spain</span>
       </div>
     </footer>

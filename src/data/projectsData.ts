@@ -4,6 +4,7 @@ export interface EngineeringProject {
   title: string;
   subtitle: string;
   field: string;
+  context?: string;
   year: string;
   accent: string;
   githubUrl?: string;
@@ -25,32 +26,93 @@ export interface EngineeringProject {
 
 export const projectsData: EngineeringProject[] = [
   {
-    id: "biofeedback-vr-core",
+    id: "fusion-reactor-digital-twin",
     num: "01",
-    title: "Biofeedback VR Core",
-    subtitle: "Real-Time Bluetooth Low Energy (BLE) Physiological Telemetry for Android / Quest XR",
-    field: "XR Biosensing & Wearable Systems",
+    title: "Fusion Reactor Digital Twin & Embedded Local RAG",
+    subtitle: "Real-time VR simulation platform for maintenance validation in nuclear fusion facilities with local zero-cloud RAG.",
+    field: "Industrial Simulation & Digital Twin",
+    context: "IDOM Consulting for ITER / IFMIF-DONES",
+    year: "2025 – 2026",
+    accent: "#38bdf8",
+    architecture: {
+      overview: "Developed a real-time VR simulation platform for maintenance validation in international nuclear fusion facilities. Built custom polygon reduction and LOD pipelines to bring massive industrial CAD datasets (+5M polygons) into real-time frame budgets (>72 FPS). Integrated an offline local LLM (Llama 3.1 via llama.cpp C++ bindings) and high-speed vector retrieval (USearch) for instant, zero-cloud technical documentation lookups.",
+      coreChallenge: "Sub-millimeter physics collision accuracy and zero-latency spatial tracking inside dense CAD toroidal geometries under strict VR refresh budgets (>72 FPS lock).",
+      engineeringSolution: "Engineered a custom deterministic 1:1 physics constraints pipeline in C#/Unity, combined with an embedded local RAG vector engine (Llama 3.1 via llama.cpp C++ bindings and USearch) that queries indexed technical blueprints locally without external cloud dependencies."
+    },
+    metrics: [
+      { label: "CAD Polygons", value: "+5M Polygons", detail: "LOD decimation pipeline" },
+      { label: "Performance", value: ">72 FPS Target", detail: "Production VR budget" },
+      { label: "Search Latency", value: "Sub-Second", detail: "Local USearch vector retrieval" },
+      { label: "Cloud Deps", value: "Zero Cloud", detail: "100% offline llama.cpp" }
+    ],
+    stack: ["Unity C#", "C++ / llama.cpp", "USearch", "Python", "GLSL / Blender"],
+    keyHighlights: [
+      "Custom polygon reduction and LOD generation pipeline for +5M CAD fusion geometries",
+      "Offline local LLM (Llama 3.1 via llama.cpp C++ bindings) with zero external network calls",
+      "High-speed Approximate Nearest Neighbor (ANN) vector retrieval powered by USearch",
+      "Sub-millimeter deterministic physics boundaries for virtual maintenance rehearsals"
+    ],
+    codeSnippets: [
+      {
+        label: "TokamakSafetyBoundary.cs",
+        code: `public class ToroidalSafetyBoundary : MonoBehaviour
+{
+    [SerializeField] private float majorRadius = 6.2f;
+    [SerializeField] private float minorRadius = 2.0f;
+
+    public bool ValidateActuatorPose(Vector3 targetPosition)
+    {
+        float planarDist = new Vector2(targetPosition.x, targetPosition.z).magnitude;
+        float torusDist = Mathf.Sqrt(Mathf.Pow(planarDist - majorRadius, 2) + Mathf.Pow(targetPosition.y, 2));
+        return torusDist <= minorRadius;
+    }
+}`
+      },
+      {
+        label: "llama_rag_bridge.cpp",
+        code: `// C++ bindings linking local vector retrieval with llama.cpp
+#include <usearch/index_dense.hpp>
+#include <llama.h>
+
+extern "C" {
+    int query_local_context(const float* query_embedding, size_t dims, char* out_buffer, size_t max_len) {
+        usearch::index_dense_t index = usearch::index_dense_t::load("fusion_manuals.usearch");
+        auto results = index.search(query_embedding, 3);
+        // Direct zero-copy dispatch into local Llama 3.1 prompt context
+        return populate_prompt_context(results, out_buffer, max_len);
+    }
+}`
+      }
+    ]
+  },
+  {
+    id: "biometric-telemetry-vr",
+    num: "02",
+    title: "Real-Time Biometric & Telemetry VR Streaming",
+    subtitle: "Low-latency telemetry streaming pipeline transmitting live physiological data from wearables into Meta Quest XR.",
+    field: "Real-Time IoT & Spatial Systems",
+    context: "Centre de Realitat Virtual de Barcelona (CRV - UPC)",
     year: "2026",
     accent: "#06b6d4",
     githubUrl: "https://github.com/Arnau10a/unity-biofeedback-vr-core",
     packageUrl: "https://github.com/Arnau10a/unity-biofeedback-vr-core.git",
     architecture: {
-      overview: "Unity Package (UPM) de producción que establece conexiones BLE de ultra-baja latencia con smartwatches (BioWatch y pulsómetros BLE estándar) en dispositivos Android y Meta Quest, capturando y serializando telemetría fisiológica en tiempo real.",
-      coreChallenge: "Integrar el stack BLE nativo de Android en el ciclo de ejecución de Unity XR sin pérdidas de framerate, manteniendo sincronizados el stream de pulso (BPM), IMU (acelerómetro/giroscopio de 6 ejes) y variables ambientales.",
-      engineeringSolution: "Arquitectura basada en eventos desacoplados (BLEConnector.OnDataReceived), puente nativo Java/Android, struct unificado BLEData, prefab plug-and-play (Biofeedback_UI_System) y pipeline de persistencia configurable en CSV (BLEDataSaver). Incluye app WearOS dedicada en Kotlin."
+      overview: "Engineered an end-to-end telemetry streaming pipeline transmitting live physiological data from wearable smartwatches (WearOS / Android via BLE) into immersive Meta Quest environments. Designed an event-driven architecture focused on zero garbage-collection allocations to preserve VR rendering budgets, alongside custom in-editor tools for researchers to calibrate live signals.",
+      coreChallenge: "Integrating the native Android BLE stack into Unity XR's update loop without frame stutter or GC spikes, maintaining synchronous streams of heart rate (BPM), 6-axis IMU, and environmental metrics.",
+      engineeringSolution: "Event-driven architecture with zero-allocation serializable structs, native Java/Android bridge, plug-and-play Unity Package Manager (UPM) distribution, and in-editor researcher calibration tools."
     },
     metrics: [
-      { label: "Target XR", value: "Meta Quest", detail: "Android Standalone VR" },
-      { label: "Data Pipeline", value: "Zero Alloc", detail: "Struct C# serializable" },
-      { label: "Distribution", value: "UPM Git", detail: "Unity Package Manager" }
+      { label: "Streaming", value: "Low-Latency BLE", detail: "Smartwatch telemetry" },
+      { label: "Memory Loop", value: "Zero GC Allocs", detail: "Preserved VR frame budget" },
+      { label: "Research Tools", value: "In-Editor Tools", detail: "Live signal calibration" },
+      { label: "Target Platform", value: "Meta Quest XR", detail: "Android Standalone VR" }
     ],
-    stack: ["Unity", "C#", "WearOS / Android", "Bluetooth LE (BLE)", "Meta Quest VR", "CSV Telemetry", "Kotlin"],
+    stack: ["Unity C#", "Bluetooth Low Energy (BLE)", "WearOS / Android", "UPM Package"],
     keyHighlights: [
-      "Instalación directa vía Unity Package Manager (UPM) con Git URL",
-      "Prefab plug-and-play Biofeedback_UI_System con escáner, conexión y persistencia CSV integrada",
-      "Estructura BLEData serializable para pulso, IMU 6-DOF, presión barométrica y rotación en tiempo real",
-      "Control bidireccional de frecuencia de transmisión del smartwatch en tiempo de ejecución",
-      "Companion App nativa WearOS/Android modular con compilación independiente"
+      "Zero GC allocation struct pipeline in update loops guaranteeing 90 FPS VR rendering",
+      "Native Android / WearOS Java bridge compiling independently with zero overhead",
+      "Plug-and-play Unity Package Manager (UPM) distribution via Git URL",
+      "In-editor telemetry monitor and CSV persistence suite for biomechanics research"
     ],
     codeSnippets: [
       {
@@ -58,16 +120,14 @@ export const projectsData: EngineeringProject[] = [
         code: `[System.Serializable]
 public struct BLEData
 {
-    public float timestamp;        // Time.time recibido
+    public float timestamp;        // Receive timestamp
     public int heartRate;          // BPM
-    public Vector3 acceleration;   // Acelerómetro (X, Y, Z)
-    public Vector3 gyroscope;      // Giroscopio (X, Y, Z)
-    public float pressure;         // Barómetro (hPa)
-    public int steps;              // Pasos acumulados
-    public float light;            // Iluminancia (lx)
-    public float temperature;      // Temp (°C)
-    public float battery;          // Batería (%)
-    public Quaternion rotation;    // Orientación
+    public Vector3 acceleration;   // Accelerometer (X, Y, Z)
+    public Vector3 gyroscope;      // Gyroscope (X, Y, Z)
+    public float pressure;         // Barometer (hPa)
+    public int steps;              // Step count
+    public float battery;          // Battery level (%)
+    public Quaternion rotation;    // Orientation
 }`
       },
       {
@@ -81,79 +141,39 @@ public class BiofeedbackController : MonoBehaviour
 
     private void OnDataReceived(BLEData data)
     {
-        // Latencia mínima para modulación de entorno VR
-        Debug.Log($"HR: {data.heartRate} BPM | Acc: {data.acceleration}");
+        // Zero-allocation callback modulating VR spatial audio and lighting
+        ApplyCardiovascularModulation(data.heartRate, data.acceleration);
     }
 }`
       }
     ]
   },
   {
-    id: "nuclear-vr",
-    num: "02",
-    title: "NuclearVerse VR",
-    subtitle: "Tokamak Fusion Reactor Digital Twin & Microsecond RAG Architecture",
-    field: "Distributed AI & Spatial Computing",
-    year: "2026",
-    accent: "#38bdf8",
-    architecture: {
-      overview: "High-fidelity holographic digital twin engineered for ITER/DEMO fusion reactors. Enables human operators to rehearse mission-critical robotic component assembly inside high-radiation plasma chambers before hardware actuation.",
-      coreChallenge: "Sub-millimeter physics collision accuracy and zero-latency spatial tracking inside dense CAD toroidal geometries under strict VR refresh budgets (90 FPS lock).",
-      engineeringSolution: "Engineered a custom deterministic 1:1 physics constraints pipeline in C#/Unity, combined with an embedded local RAG vector engine that queries indexed technical blueprints and streams data to the user HUD in microsecond intervals."
-    },
-    metrics: [
-      { label: "Spatial Precision", value: "1:1 Isometric", detail: "Sub-millimeter scale" },
-      { label: "AI Pipeline", value: "Embedded RAG", detail: "Zero-latency vector search" },
-      { label: "Frame Budget", value: "90 FPS Solid", detail: "Hardware-constrained" }
-    ],
-    stack: ["Unity / C#", "Spatial Computing", "Embedded RAG", "Vector Search", "GLSL Shaders", "Physics Engine"],
-    keyHighlights: [
-      "Zero-latency local vector database running locally without internet requirement",
-      "Full 1:1 CAD model integration with physics colliders generated on-the-fly",
-      "Head-mounted display telemetry recording and post-simulation diagnostic playback"
-    ],
-    codeSnippets: [
-      {
-        label: "TokamakBoundary.cs",
-        code: `public class ToroidalSafetyBoundary : MonoBehaviour
-{
-    [SerializeField] private float majorRadius = 6.2f;
-    [SerializeField] private float minorRadius = 2.0f;
-
-    public bool ValidateActuatorPose(Vector3 targetPosition)
-    {
-        float planarDist = new Vector2(targetPosition.x, targetPosition.z).magnitude;
-        float torusDist = Mathf.Sqrt(Mathf.Pow(planarDist - majorRadius, 2) + Mathf.Pow(targetPosition.y, 2));
-        return torusDist <= minorRadius;
-    }
-}`
-      }
-    ]
-  },
-  {
-    id: "humanoid-robotics",
+    id: "point-cloud-robotics",
     num: "03",
-    title: "Humanoid Grasping",
-    subtitle: "Autonomous 3D Point Cloud Perception Pipeline & Multi-Contact Kinematic Synthesis",
-    field: "Autonomous Robotics & Vision",
+    title: "3D Point Cloud Perception & Hand Kinematics Pipeline",
+    subtitle: "Autonomous spatial perception and multi-contact grasp pose synthesis for 16-DOF robotic hands.",
+    field: "Autonomous Robotics & Spatial Perception",
+    context: "Academic Robotics & Computer Vision Research",
     year: "2024",
     accent: "#a855f7",
     githubUrl: "https://github.com/Arnau10a/Humanoid-Robots-Grasping",
     architecture: {
-      overview: "Autonomous perception and grasp synthesis system that ingests raw RGB-D sensor point clouds to compute kinematically stable grasp poses for 16-DOF anthropomorphic robot hands.",
+      overview: "Designed an autonomous spatial perception pipeline for multi-contact robotic grasping. Processed dense 3D point clouds (filtering, surface normal estimation, and clustering) in C++ to synthesize kinematic poses for a 16-DOF robotic hand with sub-80ms pipeline latency.",
       coreChallenge: "Synthesizing multi-contact force closure points on arbitrary, unmodeled geometries in real time without access to offline CAD meshes.",
       engineeringSolution: "Designed an asynchronous ROS node pipeline written in C++ and Python, computing surface normal curvature distributions via Point Cloud Library (PCL) and evaluating GraspIt! energy metrics within an 80ms inference budget."
     },
     metrics: [
-      { label: "Pipeline Latency", value: "< 80 ms", detail: "Real-time sensor loop" },
-      { label: "Hand Kinematics", value: "16-DOF Hand", detail: "Anthropomorphic reach" },
-      { label: "Middleware IPC", value: "ROS / C++", detail: "Zero memory copy" }
+      { label: "Perception Latency", value: "< 80 ms", detail: "Real-time sensor loop" },
+      { label: "Point Cloud", value: "3D Normal & Voxel", detail: "Curvature clustering" },
+      { label: "Kinematics", value: "16-DOF Hand", detail: "Anthropomorphic reach" },
+      { label: "IPC Middleware", value: "ROS / C++", detail: "Zero memory copy" }
     ],
-    stack: ["C++", "ROS", "Python", "Point Cloud (PCL)", "GraspIt!", "Computer Vision", "Kinematics"],
+    stack: ["C++", "ROS / ROS 2", "Point Cloud (PCL)", "Python", "OpenCV"],
     keyHighlights: [
-      "Real-time filtering of noisy depth point clouds with voxel grid downsampling",
-      "Curvature analysis generating viable contact normals in under 25ms",
-      "Seamless ROS action server protocol for robotic arm and hand execution"
+      "Sub-80ms full loop from RGB-D raw point cloud ingestion to joint-angle actuation",
+      "Voxel grid downsampling and curvature normal estimation in under 25ms via PCL",
+      "16-DOF kinematic grasp synthesis using force-closure quality metrics"
     ],
     codeSnippets: [
       {
@@ -170,42 +190,49 @@ public class BiofeedbackController : MonoBehaviour
     ]
   },
   {
-    id: "reinforcement-learning",
+    id: "local-vector-search",
     num: "04",
-    title: "Fantasy RL Agent",
-    subtitle: "Deep Q-Network with Prioritized Experience Replay for Stochastic Multi-Agent Optimization",
-    field: "Deep Reinforcement Learning",
-    year: "2024",
-    accent: "#22c55e",
-    githubUrl: "https://github.com/Arnau10a/Fantasy_Machine_learning",
+    title: "Local Semantic Search & High-Speed Vector Indexing Engine",
+    subtitle: "Modular offline semantic search and vector indexing pipeline in C++ and Python with sub-millisecond latency.",
+    field: "Applied AI & Systems Architecture",
+    context: "Applied AI & Systems Architecture Research",
+    year: "2024 – 2025",
+    accent: "#10b981",
     architecture: {
-      overview: "Custom Gymnasium simulation engine and neural policy optimizer modelling weekly draft volatility, constrained budget frontiers, and non-stationary competitive player transfers.",
-      coreChallenge: "Exploration in an intractable combinatorial discrete state-action space (>10^8 configurations) subject to high variance and sparse episodic rewards.",
-      engineeringSolution: "Architected a Prioritized Experience Replay (PER) Deep Q-Network (DQN) in PyTorch with target network stabilization and calibrated epsilon annealing schedules, attaining 98.4% policy convergence against historical benchmarks."
+      overview: "Engineered a modular, low-overhead offline semantic search and vector indexing pipeline in C++ and Python. Benchmarked and integrated fast Approximate Nearest Neighbor (ANN) search using USearch against heavy vector databases, minimizing memory footprint and eliminating external cloud dependencies for embedded retrieval.",
+      coreChallenge: "Running low-latency vector similarity retrieval on constrained client hardware without consuming gigabytes of memory or relying on third-party cloud APIs.",
+      engineeringSolution: "Implemented a lightweight native C++ core wrapping USearch with custom SIMD-optimized cosine similarity routines and lightweight Python C-extensions, achieving instant retrieval with deterministic resource consumption."
     },
     metrics: [
-      { label: "Convergence Rate", value: "98.4%", detail: "Policy optimality target" },
-      { label: "Environment", value: "Custom Gym", detail: "Vectorized step execution" },
-      { label: "Network Design", value: "DQN + PER", detail: "PyTorch neural policy" }
+      { label: "Search Latency", value: "Sub-Millisecond", detail: "In-memory vector index" },
+      { label: "RAM Footprint", value: "Minimal Overhead", detail: "Vs heavy vector DBs" },
+      { label: "Cloud Deps", value: "Zero Cloud", detail: "100% offline retrieval" },
+      { label: "Core Execution", value: "Native C++", detail: "SIMD vector execution" }
     ],
-    stack: ["Python", "PyTorch", "Gymnasium", "Deep Q-Learning", "Experience Replay", "NumPy", "Optimization"],
+    stack: ["C++", "Python", "USearch", "Local Embeddings", "CMake"],
     keyHighlights: [
-      "Custom Gymnasium step & reward function with non-linear penalty terms",
-      "Sum-tree prioritized experience replay boosting sample efficiency by 4x",
-      "Extensive ablation studies on policy convergence vs heuristic baselines"
+      "Offline vector similarity index benchmarked for sub-millisecond search latencies",
+      "Fraction of the RAM footprint compared to bulky multi-gigabyte vector databases",
+      "Zero cloud reliance ensuring strict confidentiality for proprietary technical documentation",
+      "Optimized C++ core with clean Python bindings for rapid experimental iteration"
     ],
     codeSnippets: [
       {
-        label: "dqn_agent.py",
-        code: `class PrioritizedReplayBuffer:
-    def __init__(self, capacity: int, alpha: float = 0.6):
-        self.capacity = capacity
-        self.alpha = alpha
-        self.tree = SumSegmentTree(capacity)
-        
-    def sample(self, batch_size: int, beta: float):
-        indices, weights = self._sample_proportional(batch_size, beta)
-        return self._get_transitions(indices), weights`
+        label: "vector_index.cpp",
+        code: `#include <usearch/index_dense.hpp>
+#include <iostream>
+
+using namespace unum::usearch;
+
+index_dense_t build_embedded_index(size_t dimensions, metric_kind_t metric) {
+    index_dense_config_t config;
+    config.expansion_add = 64;
+    config.expansion_search = 32;
+    
+    index_dense_t index = index_dense_t::make(dimensions, metric, config);
+    index.reserve(50000); // Pre-allocate memory for deterministic execution
+    return index;
+}`
       }
     ]
   }

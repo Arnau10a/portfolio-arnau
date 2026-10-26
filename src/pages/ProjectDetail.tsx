@@ -72,11 +72,18 @@ const ProjectDetail: React.FC = () => {
           </div>
 
           <h1 
-            className="text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-tight mb-6"
+            className="text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-tight mb-4"
             style={{ fontFamily: 'var(--font-syne)' }}
           >
             {project.title}
           </h1>
+
+          {project.context && (
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-mono text-cyan-400 mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+              <span>Context: {project.context}</span>
+            </div>
+          )}
 
           <p className="text-lg sm:text-xl text-neutral-300 font-light leading-relaxed max-w-3xl">
             {project.subtitle}

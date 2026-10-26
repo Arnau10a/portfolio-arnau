@@ -25,7 +25,7 @@ const Layout: React.FC = () => {
           onMouseEnter={() => setCursorVariant('button')}
           onMouseLeave={() => setCursorVariant('default')}
         >
-          Arnau Garcia
+          Arnau Garcia Parise
         </Link>
 
         <div 
@@ -37,9 +37,7 @@ const Layout: React.FC = () => {
             <>
               <a href="#projects" className="hover:text-white transition-colors">Work</a>
               <a href="#tech-stack" className="hover:text-white transition-colors">Stack</a>
-              <Link to="/laboratory" className="text-neutral-300 hover:text-white transition-colors">
-                Lab
-              </Link>
+              <a href="#background" className="hover:text-white transition-colors">Background</a>
               <a href="#contact" className="hover:text-white transition-colors">Contact</a>
             </>
           ) : (

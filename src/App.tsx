@@ -13,6 +13,7 @@ import Layout from './components/Layout';
 import Hero from './components/Hero';
 import TechStack from './components/TechStack';
 import BentoGrid from './components/BentoGrid';
+import Background from './components/Background';
 import Footer from './components/Footer';
 
 // Pages
@@ -25,6 +26,7 @@ const Home: React.FC = () => {
       <Hero />
       <TechStack />
       <BentoGrid />
+      <Background />
       <Footer />
     </>
   );
