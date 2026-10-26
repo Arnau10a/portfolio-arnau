@@ -1,5 +1,7 @@
 {
+  "cleanUrls": false,
   "rewrites": [
+    { "source": "/google0a28b7db43649562.html", "destination": "/google0a28b7db43649562.html" },
     { "source": "/(.*)", "destination": "/" }
   ],
   "headers": [
