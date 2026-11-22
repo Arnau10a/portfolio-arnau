@@ -1,104 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --font-syne: "Syne", sans-serif;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  body, a, button, input, textarea, select, [role="button"] {
-    cursor: none !important;
-  }
+  --font-display: "Outfit", "Inter", sans-serif;
 }
 
 :root {
   font-family: var(--font-sans);
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: dark;
-  color: #ededed;
-  background-color: #000000;
-
+  color-scheme: light;
+  color: #0C1016;
+  background-color: #F3F5F6;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  width: 100%;
-  overflow-x: hidden;
-  background-color: #000000;
-  color: #ededed;
-}
-
+html,
+body,
 #root {
+  margin: 0;
+  padding: 0;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
+  background-color: #F3F5F6;
+  color: #0C1016;
+  /* overflow-x: clip preserves position: sticky descendants unlike overflow-x: hidden */
+  overflow-x: clip;
 }
 
-/* Linear / Apple button */
-.btn-linear {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #ffffff;
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-linear:hover {
-  background: #1a1a1a;
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
-}
-
-.btn-linear:active {
-  transform: translateY(0);
-}
-
-/* Linear subtle card */
-.card-linear {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card-linear:hover {
-  background: rgba(255, 255, 255, 0.035);
-  border-color: rgba(255, 255, 255, 0.16);
-}
-
-/* Minimal pill tag */
-.tag-pill {
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #a1a1aa;
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* Hide scrollbar globally */
-::-webkit-scrollbar {
-  display: none;
-}
-
-html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
+.grain-overlay {
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
 }
