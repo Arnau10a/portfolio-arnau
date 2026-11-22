@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, ArrowUpRight, Asterisk, Film, Mail, Shirt } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Asterisk, Box, Film, Mail, Shirt } from 'lucide-react';
 import { CONTACT } from '../data/portfolioData';
 
 interface CreativeLabProps {
@@ -11,6 +11,29 @@ const CREATIVE_ROLES = [
   '3D Motion & Tour Promos',
   'Cover & Merch Art Direction',
   'Real-Time Shaders & WebGL',
+];
+
+const LOGO_ALPHA_LOOPS = [
+  {
+    name: 'Dymension',
+    video: '/assets/creative/logos/01_logo_M.webm',
+    poster: '/assets/creative/logos/01_logo_M.webp',
+  },
+  {
+    name: 'FURY',
+    video: '/assets/creative/logos/02_logo_FURY.webm',
+    poster: '/assets/creative/logos/02_logo_FURY.webp',
+  },
+  {
+    name: 'DELREVES',
+    video: '/assets/creative/logos/03_logo_DELREVES.webm',
+    poster: '/assets/creative/logos/03_logo_DELREVES.webp',
+  },
+  {
+    name: 'SLVL',
+    video: '/assets/creative/logos/04_logo_SLVL.webm',
+    poster: '/assets/creative/logos/04_logo_SLVL.webp',
+  },
 ];
 
 const FLORA_SERIES = [
@@ -239,7 +262,89 @@ export const CreativeLab: React.FC<CreativeLabProps> = ({ onBackHome }) => {
             </div>
           </article>
 
-          {/* Showcase 3: Generative Flora — Live Visual & Lighting Moods */}
+          {/* Showcase 3: 3D Logo Systems & VJ Alpha Loops */}
+          <article className="rounded-[32px] bg-[#3A3E44] p-7 text-white sm:p-11 md:p-14 lg:rounded-[48px]">
+            <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-white/55">
+                  <Box size={13} />
+                  <span>Artist Identity · Transparent Alpha Loops · Showreel</span>
+                </span>
+                <h2
+                  className="mt-2 text-4xl font-medium tracking-[-0.03em] leading-[1.02] sm:text-6xl"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  <span className="text-white">3D Logo Systems </span>
+                  <span className="text-white/45">&amp; VJ Alpha Loops</span>
+                </h2>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {['Alpha WebM Loops', 'SVG-to-OBJ Pipeline', 'Blender Python', 'Wireframe + Clay'].map(
+                  (tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-black/20 px-3.5 py-1.5 text-xs font-medium text-white/85"
+                    >
+                      {tag}
+                    </span>
+                  )
+                )}
+              </div>
+            </div>
+
+            <div className="mt-8 space-y-5">
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-black sm:rounded-3xl">
+                <video
+                  src="/assets/creative/logos/logos_showreel.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="aspect-video w-full object-cover"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+                {LOGO_ALPHA_LOOPS.map((logo) => (
+                  <div
+                    key={logo.name}
+                    className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-[#0C1016] sm:rounded-3xl"
+                  >
+                    <video
+                      src={logo.video}
+                      poster={logo.poster}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="h-full w-full object-contain p-2 transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                    <span className="pointer-events-none absolute bottom-3 left-3 rounded-full bg-black/60 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/80 backdrop-blur-xs">
+                      {logo.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 border-t border-white/15 pt-6 flex items-start gap-3.5">
+              <Asterisk
+                size={20}
+                strokeWidth={1.8}
+                className="mt-0.5 shrink-0 text-white/85"
+                aria-hidden="true"
+              />
+              <p className="max-w-3xl text-sm leading-relaxed text-white/80 sm:text-[15px]">
+                Automated SVG-to-3D geometry &amp; Blender Cycles pipeline turning flat
+                artist and label wordmarks into transparent 4:5 alpha VJ loops,
+                stage screen overlays, and wireframe/clay process reels.
+              </p>
+            </div>
+          </article>
+
+          {/* Showcase 4: Generative Flora — Live Visual & Lighting Moods */}
           <section className="pt-4">
             <p className="mb-3 text-xs font-medium tracking-wide text-[#707580]">
               Live Visuals &amp; Atmospheric Moods
