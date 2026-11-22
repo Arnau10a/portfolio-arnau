@@ -9,15 +9,19 @@ export const HeroOverlay: React.FC<HeroOverlayProps> = ({ hasMoved }) => {
   return (
     <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-end items-center pb-8 select-none">
       <div className="grain-overlay absolute inset-0" aria-hidden="true" />
-      <div className="relative flex flex-col items-center gap-2">
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent via-[#F3F5F6]/55 to-[#F3F5F6] sm:h-56"
+        aria-hidden="true"
+      />
+      <div className="relative z-10 flex flex-col items-center gap-2">
         <p
-          className={`text-[11px] uppercase tracking-[0.32em] text-zinc-800/55 transition-opacity duration-700 ${
+          className={`text-[11px] uppercase tracking-[0.32em] text-zinc-900/60 transition-opacity duration-700 ${
             hasMoved ? 'opacity-0' : 'opacity-100'
           }`}
         >
           Move cursor to cast light
         </p>
-        <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.28em] text-zinc-800/50">
+        <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.28em] text-zinc-900/60">
           <span>Scroll to explore</span>
           <ArrowDown size={11} className="animate-bounce" />
         </div>

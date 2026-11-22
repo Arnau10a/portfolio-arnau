@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Lenis from 'lenis';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -12,17 +13,64 @@ import { ExperienceSection } from './components/sections/ExperienceSection';
 import { FooterSection } from './components/sections/FooterSection';
 import { CreativeLab } from './pages/CreativeLab';
 
-function AppShell() {
+function HomePage() {
   const [hasMoved, setHasMoved] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
   const heroRef = useRef<HTMLElement>(null);
-  const lenisRef = useRef<Lenis | null>(null);
-  const location = useLocation();
-  const navigate = useNavigate();
+
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroY = useTransform(heroScrollProgress, [0, 1], ['0%', '14%']);
+  const heroOpacity = useTransform(heroScrollProgress, [0, 0.7, 1], [1, 0.92, 0.15]);
 
   const handleFirstMove = useCallback(() => {
     setHasMoved(true);
   }, []);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting);
+      },
+      { threshold: 0.01 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <main>
+      <section
+        id="hero"
+        ref={heroRef}
+        className="relative h-dvh w-full overflow-hidden bg-[#F3F5F6]"
+      >
+        <motion.div
+          style={{ y: heroY, opacity: heroOpacity }}
+          className="h-full w-full will-change-transform"
+        >
+          <HeroScene active={isHeroVisible} onFirstMove={handleFirstMove} />
+        </motion.div>
+        <HeroOverlay hasMoved={hasMoved} />
+      </section>
+
+      <EditorialIntro />
+      <ProjectStack />
+      <ExperienceSection />
+    </main>
+  );
+}
+
+function AppShell() {
+  const lenisRef = useRef<Lenis | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -44,23 +92,6 @@ function AppShell() {
       lenisRef.current = null;
     };
   }, []);
-
-  useEffect(() => {
-    if (location.pathname !== '/') return;
-
-    const el = heroRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsHeroVisible(entry.isIntersecting);
-      },
-      { threshold: 0.01 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [location.pathname]);
 
   const scrollToSection = useCallback((sectionId: string) => {
     const target = document.getElementById(sectionId);
@@ -118,23 +149,7 @@ function AppShell() {
           path="/"
           element={
             <>
-              <main>
-                <section
-                  id="hero"
-                  ref={heroRef}
-                  className="relative h-dvh w-full overflow-hidden bg-[#262b33]"
-                >
-                  <HeroScene
-                    active={location.pathname === '/' && isHeroVisible}
-                    onFirstMove={handleFirstMove}
-                  />
-                  <HeroOverlay hasMoved={hasMoved} />
-                </section>
-
-                <EditorialIntro />
-                <ProjectStack />
-                <ExperienceSection />
-              </main>
+              <HomePage />
               <FooterSection onNavigate={handleNavigateSection} />
             </>
           }
