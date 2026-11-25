@@ -80,6 +80,203 @@ export const CreativeLab: React.FC<CreativeLabProps> = ({ onBackHome }) => {
         </div>
 
         <div className="mt-14 space-y-12">
+          {/* Showcase 1: Club Stage LED & Liquid Prism (9:16 Cycles + Real Blender Viewport) */}
+          <article className="rounded-[32px] bg-[#0C1016] p-7 text-white sm:p-11 md:p-14 lg:rounded-[48px]">
+            <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-white/50">
+                  <Film size={13} />
+                  <span>Stage LED Mockup · Liquid Prism · Blender 5.3 Viewport</span>
+                </span>
+                <h2
+                  className="mt-2 text-4xl font-medium tracking-[-0.03em] leading-[1.02] sm:text-6xl"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  <span className="text-white">Club Stage LED </span>
+                  <span className="text-white/45">&amp; Liquid Prism</span>
+                </h2>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {[
+                  'LED Stage Booth',
+                  'Obsidian Prism Shader',
+                  'Blender 5.3 Viewport',
+                  '9:16 Club Loops',
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white/85"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+              <div className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 bg-black sm:rounded-3xl">
+                <video
+                  src="/assets/creative/stage/club_led_booth_9x16.mp4"
+                  poster="/assets/creative/stage/club_led_booth_9x16.webp"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="h-full w-full object-cover"
+                />
+                <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/65 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-xs">
+                  Stage LED · Final
+                </span>
+              </div>
+
+              <div className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 bg-black sm:rounded-3xl">
+                <video
+                  src="/assets/creative/stage/club_led_booth_blender_9x16_solid.mp4"
+                  poster="/assets/creative/stage/club_led_booth_blender_9x16_solid.webp"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="h-full w-full object-cover"
+                />
+                <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/65 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-xs">
+                  Blender · Solid
+                </span>
+              </div>
+
+              <div className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 bg-black sm:rounded-3xl">
+                <video
+                  src="/assets/creative/stage/bolt_liquid_prism_9x16.mp4"
+                  poster="/assets/creative/stage/bolt_liquid_prism_9x16.webp"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="h-full w-full object-cover"
+                />
+                <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/65 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-xs">
+                  Liquid Prism · Final
+                </span>
+              </div>
+
+              <div className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 bg-black sm:rounded-3xl">
+                <video
+                  src="/assets/creative/stage/bolt_liquid_prism_blender_9x16_material.mp4"
+                  poster="/assets/creative/stage/bolt_liquid_prism_blender_9x16_material.webp"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="h-full w-full object-cover"
+                />
+                <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/65 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-xs">
+                  Blender · Material
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-8 border-t border-white/15 pt-6 flex items-start gap-3.5">
+              <Asterisk
+                size={20}
+                strokeWidth={1.8}
+                className="mt-0.5 shrink-0 text-white/85"
+                aria-hidden="true"
+              />
+              <p className="max-w-3xl text-sm leading-relaxed text-white/80 sm:text-[15px]">
+                360° obsidian liquid-prism emblem and full 3D club booth LED wall
+                mockup built in Blender 5.3 Cycles, paired with direct vertical
+                Blender viewport captures in Solid and Material Preview modes.
+              </p>
+            </div>
+          </article>
+
+          {/* Showcase 2: KRONIK — Oil-Slick Techno Sigil (9:16 Final + Horizontal Blender Wireframe) */}
+          <article className="rounded-[32px] bg-[#161B22] p-7 text-white sm:p-11 md:p-14 lg:rounded-[48px]">
+            <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-white/50">
+                  <Box size={13} />
+                  <span>Techno Sigil · Thin-Film Iridescence · Blender Wireframe</span>
+                </span>
+                <h2
+                  className="mt-2 text-4xl font-medium tracking-[-0.03em] leading-[1.02] sm:text-6xl"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  <span className="text-white">KRONIK </span>
+                  <span className="text-white/45">Oil-Slick Sigil</span>
+                </h2>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {[
+                  'Thin-Film Oil-Slick',
+                  '9:16 Orbital Loop',
+                  'Blender 5.3 Wireframe',
+                  'Cycles OptiX',
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white/85"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[9fr_24fr] lg:items-stretch">
+              <div className="group relative aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 bg-black sm:rounded-3xl">
+                <video
+                  src="/assets/creative/stage/kronik_oil_slick_9x16.mp4"
+                  poster="/assets/creative/stage/kronik_oil_slick_9x16.webp"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="h-full w-full object-cover"
+                />
+                <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/65 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-xs">
+                  Oil-Slick · Final
+                </span>
+              </div>
+
+              <div className="group relative aspect-video lg:aspect-auto overflow-hidden rounded-2xl border border-white/10 bg-black sm:rounded-3xl">
+                <video
+                  src="/assets/creative/stage/kronik_oil_slick_blender_wireframe.mp4"
+                  poster="/assets/creative/stage/kronik_oil_slick_blender_wireframe.webp"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="h-full w-full object-cover"
+                />
+                <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/65 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/85 backdrop-blur-xs">
+                  Blender 5.3 · Wireframe Layout
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-8 border-t border-white/15 pt-6 flex items-start gap-3.5">
+              <Asterisk
+                size={20}
+                strokeWidth={1.8}
+                className="mt-0.5 shrink-0 text-white/85"
+                aria-hidden="true"
+              />
+              <p className="max-w-3xl text-sm leading-relaxed text-white/80 sm:text-[15px]">
+                Custom brutalist techno sigil and counter-rotating orbital ring
+                shaded with Blender 5.3 native Thin-Film interference (4D-driven
+                oil-slick chrome), showcased alongside its live horizontal Blender
+                wireframe viewport pass.
+              </p>
+            </div>
+          </article>
+
           {/* Unified Showcase: Cyber Chrome & Star Spiral (9:16 vertical motion + 1:1 2K Totem) */}
           <article className="rounded-[32px] bg-[#0C1016] p-7 text-white sm:p-11 md:p-14 lg:rounded-[48px]">
             <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
